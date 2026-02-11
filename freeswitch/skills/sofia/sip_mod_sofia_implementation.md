@@ -366,6 +366,14 @@ const char *stir_shaken_as_url;  // Authentication service URL
 const char *stir_shaken_vs_ca_dir;  // Verification service CA directory
 ```
 
+## Deprecated Profile Params
+
+**`rtp-timeout-sec` and `rtp-hold-timeout-sec`** (sofia.c:5409-5421):
+Replaced by channel variables `media_timeout` / `media_hold_timeout`.
+Still parsed but logs WARNING. Two critical differences:
+- **Units**: old params in **seconds**, new variables in **milliseconds**
+- **Scope**: old params per-**profile** (all calls), new variables per-**channel** (set in dialplan)
+
 ## Timing Constants
 
 ### Session Timers

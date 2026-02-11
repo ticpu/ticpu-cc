@@ -161,6 +161,25 @@ Main SDP negotiation: Sofia-SIP parsing, codec matching, ICE candidates, SRTP/DT
 **Timeout settings**: Max missed packets (normal/hold), media/hold timeouts
 **Quality limits**: 50 check frames, 5 mismatch frames before action
 
+**DEPRECATED profile params** (sofia.c:5409-5421, log WARNING on use):
+- `rtp-timeout-sec` → replaced by channel variable `media_timeout`
+- `rtp-hold-timeout-sec` → replaced by channel variable `media_hold_timeout`
+
+**WARNING: unit change** (switch_core_media.c:2761):
+The deprecated profile params are in **seconds**. The replacement channel
+variables are in **milliseconds**. A direct value copy will break behavior
+(`300` seconds ≠ `300` milliseconds).
+
+**Scope change**: profile param → channel variable. The old params were
+per-profile (all calls on that profile). The new variables are per-channel
+(set in dialplan or per-call), allowing per-call tuning.
+
+**Channel variables** (switch_core_media.c:2726, per-engine):
+- `media_timeout` — ms of no RTP before hangup
+- `media_hold_timeout` — ms of no RTP while on hold before hangup
+- `media_timeout_audio` / `media_timeout_video` — per-media-type overrides
+- `media_hold_timeout_audio` / `media_hold_timeout_video` — per-media-type hold overrides
+
 
 ## RTP Integration
 
