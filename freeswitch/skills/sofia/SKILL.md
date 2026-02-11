@@ -1,17 +1,14 @@
 ---
 name: sofia
 description: >
-  FreeSWITCH mod_sofia SIP expert — load this skill for mod_sofia internals,
-  libsofia-sip integration, SIP/RTP debugging, authentication failures,
-  no-audio problems, registration issues, NAT handling, or performance
-  bottlenecks. Covers 765+ hard-coded constants, 120+ flags (80+ PFLAGS,
-  40+ TFLAGS), NUA event dispatching, SDP offer/answer, RTP implementation
-  (SRTP, DTMF, jitter buffers), SIP timers, transport management
-  (UDP/TCP/TLS/WS/WSS), gateway state machines, multi-algorithm digest
-  auth (RFC 8760). Use for: debugging SIP call flow, analyzing mod_sofia
-  behavior, fixing authentication/registration/NAT/media issues, reviewing
-  mod_sofia code, or any SIP-related FreeSWITCH question. For codec
-  internals and core media C code use the freeswitch-dev skill.
+  ALWAYS load this skill before answering any FreeSWITCH SIP, mod_sofia,
+  or RTP question. Covers mod_sofia internals, libsofia-sip integration,
+  765+ hard-coded constants, 120+ flags (80+ PFLAGS, 40+ TFLAGS), NUA event
+  dispatching, SDP offer/answer, RTP implementation (SRTP, DTMF, jitter
+  buffers), SIP timers, transport management (UDP/TCP/TLS/WS/WSS), gateway
+  state machines, multi-algorithm digest auth (RFC 8760). Also load the
+  dev skill for codec internals and core media C code, or the usage skill
+  for dialplan/config/ESL.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---

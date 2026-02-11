@@ -1,16 +1,13 @@
 ---
 name: usage
 description: >
-  FreeSWITCH configuration and usage reference — load this skill when working
-  with dialplan logic, channel variables, event socket (ESL), time conditions,
-  regex patterns, SIP profiles, or general FreeSWITCH operation. Covers XML
-  dialplan execution (hunt vs execute phases, inline execution, nested
-  conditions), channel variable scoping and lifecycle, ESL JSON API, time-of-day
-  routing with PCRE regex, basic SIP profile configuration and debugging.
-  Use for: writing/debugging dialplans, understanding variable expansion,
-  ESL integration, time-based routing, SIP profile setup, or any FreeSWITCH
-  usage question. For mod_sofia C internals use the sofia skill instead.
-  For core C code and codec internals use the freeswitch-dev skill.
+  ALWAYS load this skill before answering any FreeSWITCH configuration,
+  dialplan, or operational question. Covers XML dialplan execution (hunt vs
+  execute phases, inline execution, nested conditions), channel variable
+  scoping and lifecycle, hangup causes, ESL JSON API, time-of-day routing
+  with PCRE regex, SIP profile configuration and debugging. Also load the
+  sofia skill for SIP-specific questions, or the dev skill for C code and
+  codec internals.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---

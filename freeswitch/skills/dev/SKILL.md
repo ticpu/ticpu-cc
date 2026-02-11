@@ -1,16 +1,14 @@
 ---
 name: dev
 description: >
-  FreeSWITCH core development and internals — load this skill when writing or
-  reviewing FreeSWITCH C code, working on modules, codec implementations,
-  media framework internals, transcoding bridge, or CI/CD build infrastructure.
-  Covers core media framework (switch_core_media), codec negotiation internals
-  (Normal/Greedy/Scrooge modes), Opus FEC/PLC implementation, AMR-WB OA/BE
-  mode-set negotiation, Oreka recording integration, transcoding bridge IO
-  path, and Cauca CI/CD pipeline. Use for: writing FreeSWITCH C modules,
-  debugging codec/media issues at the implementation level, understanding
-  transcoding internals, or build/CI work. For dialplan/config/ESL use the
-  freeswitch skill. For mod_sofia SIP internals use the sofia skill.
+  ALWAYS load this skill before answering any FreeSWITCH C development
+  question — writing/reviewing modules, codec implementations, media
+  framework internals, transcoding, or CI/CD. Covers core media framework
+  (switch_core_media), codec negotiation internals (Normal/Greedy/Scrooge),
+  Opus FEC/PLC, AMR-WB OA/BE mode-set negotiation, Oreka recording,
+  transcoding bridge IO path, and Cauca CI/CD pipeline. Also load the
+  usage skill for dialplan/config/ESL, or the sofia skill for mod_sofia
+  SIP internals.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
