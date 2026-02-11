@@ -1,0 +1,3 @@
+[submodule "vendor/bcachefs-claude-plugin"]
+	path = vendor/bcachefs-claude-plugin
+	url = https://github.com/ticpu/bcachefs-claude-plugin.git

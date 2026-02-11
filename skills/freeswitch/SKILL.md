@@ -1,0 +1,71 @@
+---
+name: freeswitch
+description: >
+  FreeSWITCH configuration and usage reference — load this skill when working
+  with dialplan logic, channel variables, event socket (ESL), time conditions,
+  regex patterns, SIP profiles, or general FreeSWITCH operation. Covers XML
+  dialplan execution (hunt vs execute phases, inline execution, nested
+  conditions), channel variable scoping and lifecycle, ESL JSON API, time-of-day
+  routing with PCRE regex, basic SIP profile configuration and debugging.
+  Use for: writing/debugging dialplans, understanding variable expansion,
+  ESL integration, time-based routing, SIP profile setup, or any FreeSWITCH
+  usage question. For mod_sofia C internals use the sofia skill instead.
+  For core C code and codec internals use the freeswitch-dev skill.
+user-invocable: true
+allowed-tools: Read, Grep, Glob, Bash, Task
+---
+
+# FreeSWITCH Assistant
+
+You are helping with FreeSWITCH configuration and usage. FreeSWITCH is a
+modular telephony platform. This skill covers configuration, dialplan,
+variables, ESL, and basic SIP operation.
+
+## Key Concepts
+
+- **Hunt-then-execute model**: Dialplan has two phases — conditions are
+  evaluated during hunt, actions run during execute. Variables set in execute
+  are unavailable to hunt-phase conditions.
+- **Inline execution**: Only `SAF_ROUTING_EXEC` applications (set, export,
+  hash, etc.) work during hunt phase via `inline="true"`.
+- **Channel variables**: Key-value store per call leg, set/read throughout
+  the call lifecycle with scoping rules (local vs inherited vs exported).
+- **Event system**: Pub/sub with subclasses; `switch_event_t` carries
+  headers + body.
+- **State machine**: CS_NEW → CS_INIT → CS_ROUTING → CS_EXECUTE →
+  CS_EXCHANGE_MEDIA → CS_HANGUP → CS_REPORTING → CS_DESTROY.
+- **SIP profiles**: Each `sofia_profile` binds to an IP:port and handles
+  SIP signaling. Profiles have gateways for outbound registration. Basic
+  debugging: `sofia status`, `sofia status profile <name>`,
+  `sofia loglevel all 9`, `sofia global siptrace on`.
+
+## Hard Limits
+
+```c
+#define MAX_RECUR 100          // Dialplan nesting depth
+int ovector[30]                // PCRE capture limit (15 pairs)
+```
+
+## Detailed Reference
+
+Read the reference docs bundled with this skill (same directory as this file).
+Pick the relevant ones based on $ARGUMENTS before answering questions.
+
+- [dialplan_contexts.md](dialplan_contexts.md) - Context structure, extension matching, continue flag
+- [dialplan_execution_flow.md](dialplan_execution_flow.md) - Hunt vs execute phases
+- [dialplan_execution_flow_detailed.md](dialplan_execution_flow_detailed.md) - Detailed execution flow with code paths
+- [dialplan_xml_reference.md](dialplan_xml_reference.md) - XML dialplan syntax reference
+- [nested_conditions_behavior.md](nested_conditions_behavior.md) - Nested condition evaluation logic
+- [freeswitch_time_conditions_and_regex.md](freeswitch_time_conditions_and_regex.md) - Time-of-day routing, PCRE regex
+- [freeswitch_variables_guide.md](freeswitch_variables_guide.md) - Variable scoping, lifecycle, expansion
+- [esl_api_json_formatting.md](esl_api_json_formatting.md) - ESL JSON API formatting
+- [sip_freeswitch_master_guide.md](sip_freeswitch_master_guide.md) - SIP debugging overview and common patterns
+
+## Guidelines
+
+- Consult the reference docs first, verify with source code when needed
+- Back answers with file:line evidence
+- Trust source code over community wiki (may be outdated)
+- Hunt-then-execute is the most common source of dialplan confusion
+- For deep mod_sofia internals (flags, constants, NUA) → use the `sofia` skill
+- For core C code, codec implementations, build system → use the `freeswitch-dev` skill

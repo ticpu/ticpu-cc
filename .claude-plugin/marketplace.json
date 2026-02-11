@@ -1,0 +1,19 @@
+{
+  "name": "ticpu-cc",
+  "owner": {
+    "name": "Jérôme Poulin",
+    "email": "jeromepoulin@gmail.com"
+  },
+  "metadata": {
+    "description": "Personal Claude Code skill marketplace"
+  },
+  "plugins": [
+    {
+      "name": "freeswitch",
+      "source": "./",
+      "description": "FreeSWITCH development skills: config/usage, core C internals, and mod_sofia SIP",
+      "category": "development",
+      "keywords": ["freeswitch", "voip", "sip", "sofia", "rtp", "telephony", "dialplan"]
+    }
+  ]
+}
