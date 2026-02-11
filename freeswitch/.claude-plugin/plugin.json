@@ -1,7 +1,7 @@
 {
   "name": "freeswitch",
   "version": "0.1.0",
-  "description": "FreeSWITCH development skills: config/usage, core C internals, and mod_sofia SIP",
+  "description": "FreeSWITCH skills: usage/config, core C development, and mod_sofia SIP internals",
   "author": {
     "name": "Jérôme Poulin",
     "email": "jeromepoulin@gmail.com",
@@ -9,5 +9,5 @@
   },
   "repository": "https://github.com/ticpu/ticpu-cc",
   "license": "MPL-1.1",
-  "keywords": ["freeswitch", "voip", "sip", "sofia", "rtp", "telephony", "dialplan"]
+  "keywords": ["freeswitch", "voip", "sip", "sofia", "rtp", "dialplan"]
 }

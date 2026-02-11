@@ -1,5 +1,5 @@
 ---
-name: freeswitch
+name: usage
 description: >
   FreeSWITCH configuration and usage reference — load this skill when working
   with dialplan logic, channel variables, event socket (ESL), time conditions,

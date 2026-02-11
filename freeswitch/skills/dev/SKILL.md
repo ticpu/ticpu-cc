@@ -1,5 +1,5 @@
 ---
-name: freeswitch-dev
+name: dev
 description: >
   FreeSWITCH core development and internals — load this skill when writing or
   reviewing FreeSWITCH C code, working on modules, codec implementations,

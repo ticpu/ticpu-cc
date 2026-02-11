@@ -10,10 +10,17 @@
   "plugins": [
     {
       "name": "freeswitch",
-      "source": "./",
-      "description": "FreeSWITCH development skills: config/usage, core C internals, and mod_sofia SIP",
+      "source": "./freeswitch/",
+      "description": "FreeSWITCH skills: usage/config, core C development, and mod_sofia SIP internals",
       "category": "development",
-      "keywords": ["freeswitch", "voip", "sip", "sofia", "rtp", "telephony", "dialplan"]
+      "keywords": ["freeswitch", "voip", "sip", "sofia", "rtp", "dialplan"]
+    },
+    {
+      "name": "bcachefs",
+      "source": "./vendor/bcachefs-claude-plugin/",
+      "description": "bcachefs filesystem development context: architecture, subsystems, on-disk format",
+      "category": "development",
+      "keywords": ["bcachefs", "filesystem", "kernel", "linux"]
     }
   ]
 }
