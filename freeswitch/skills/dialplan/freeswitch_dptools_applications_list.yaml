@@ -1,0 +1,293 @@
+# FreeSWITCH mod_dptools Applications - Compact List
+
+call_control:
+  acknowledge_call: {}
+  answer: {}
+  hangup:
+    params: ["cause"]
+  ring_ready: {}
+  pre_answer: {}
+  bridge:
+    params: ["channel_url"]
+  transfer:
+    params: ["exten", "dialplan", "context"]
+  att_xfer:
+    desc: attended transfer
+    params: ["channel_url"]
+  blind_transfer_ack:
+    params: ["enable"]
+  early_hangup: {}
+  intercept:
+    params: ["uuid", "bleg_flag"]
+  three_way:
+    params: ["uuid"]
+  park: {}
+  unhold: {}
+  hold:
+    params: ["message"]
+  soft_hold:
+    params: ["unhold_key", "moh_a", "moh_b"]
+
+media_playback:
+  playback:
+    params: ["path"]
+  endless_playback:
+    params: ["path"]
+  loop_playback:
+    params: ["loops", "path"]
+  broadcast:
+    params: ["path", "leg"]
+  displace_session:
+    desc: mix audio into channel
+    params: ["path", "flags", "time_limit_ms"]
+  stop_displace_session:
+    params: ["path"]
+  speak:
+    desc: text-to-speech
+    params: ["engine", "voice", "text"]
+  say:
+    desc: language-aware text-to-speech
+    params: ["module_name", "lang", "say_type", "say_method", "say_gender", "text"]
+  phrase:
+    params: ["macro_name", "data"]
+  echo: {}
+  delay_echo:
+    params: ["delay_ms"]
+  gentones:
+    desc: generate TGML tones
+    params: ["tgml_script", "loops"]
+
+dtmf:
+  send_dtmf:
+    params: ["dtmf_data"]
+  queue_dtmf:
+    params: ["dtmf_data"]
+  read:
+    params: ["min", "max", "file", "var_name", "timeout", "terminators", "digit_timeout"]
+  play_and_get_digits:
+    params: ["min", "max", "tries", "timeout", "terminators", "file", "invalid_file", "var_name", "regexp", "digit_timeout", "failure_ext", "failure_dp", "failure_context"]
+  block_dtmf: {}
+  unblock_dtmf: {}
+  flush_dtmf: {}
+  bind_digit_action:
+    params: ["realm", "digits_or_regex", "action_string", "value", "dtmf_leg", "event_leg"]
+  clear_digit_action:
+    params: ["realm_or_all", "target"]
+  digit_action_set_realm:
+    params: ["realm", "target"]
+  bind_meta_app:
+    params: ["key", "legs", "flags", "app"]
+  unbind_meta_app:
+    params: ["key"]
+  deduplicate_dtmf:
+    params: ["only_rtp"]
+
+recording:
+  record:
+    params: ["path", "time_limit_secs", "silence_thresh", "silence_hits"]
+  record_session:
+    params: ["path", "timeout"]
+  stop_record_session:
+    params: ["path"]
+  record_session_pause:
+    params: ["path"]
+  record_session_resume:
+    params: ["path"]
+  record_session_mask:
+    params: ["path"]
+  record_session_unmask:
+    params: ["path"]
+
+variables:
+  set:
+    params: ["varname", "value"]
+  set_global:
+    params: ["varname", "value"]
+  unset:
+    params: ["varname"]
+  multiset:
+    desc: set multiple variables
+    params: ["delimiter", "assignments"]
+  multiunset:
+    desc: unset multiple variables
+    params: ["delimiter", "variables"]
+  export:
+    desc: set and export to B-leg
+    params: ["varname", "value"]
+  bridge_export:
+    desc: export across bridge
+    params: ["varname", "value"]
+  transfer_vars:
+    params: ["variable_or_prefix"]
+  push:
+    desc: push to variable stack
+    params: ["varname", "value"]
+  unshift:
+    desc: unshift from variable stack
+    params: ["varname", "value"]
+  eval:
+    desc: variable expansion
+
+detection:
+  detect_speech:
+    params: ["mod_name", "gram_name", "gram_path", "addr"]
+  play_and_detect_speech:
+    params: ["file", "engine", "params", "grammar"]
+  detect_audio:
+    params: ["threshold", "audio_hits", "timeout_ms", "file"]
+  detect_silence:
+    params: ["threshold", "silence_hits", "timeout_ms", "file"]
+  wait_for_silence:
+    params: ["silence_thresh", "silence_hits", "listen_hits", "timeout_ms", "file"]
+  tone_detect:
+    params: ["key", "tone_spec", "timeout"]
+  stop_tone_detect: {}
+  fax_detect: {}
+
+eavesdrop:
+  eavesdrop:
+    params: ["target"]
+  native_eavesdrop:
+    params: ["uuid", "direction"]
+
+media_control:
+  start_dtmf: {}
+  stop_dtmf: {}
+  start_dtmf_generate: {}
+  stop_dtmf_generate:
+    params: ["write"]
+  set_audio_level:
+    params: ["stream", "vol"]
+  set_mute:
+    params: ["stream", "mute_value"]
+  debug_media:
+    params: ["stream_type", "state"]
+  novideo: {}
+  media_reset: {}
+  jitterbuffer:
+    params: ["jitterbuffer_data"]
+  cng_plc: {}
+
+scheduling:
+  sched_hangup:
+    params: ["time", "cause"]
+  sched_transfer:
+    params: ["time", "extension", "dialplan", "context"]
+  sched_broadcast:
+    params: ["time", "path", "leg"]
+  sched_cancel:
+    params: ["group"]
+
+heartbeat:
+  enable_heartbeat:
+    params: ["interval"]
+  sched_heartbeat:
+    params: ["interval"]
+  enable_keepalive:
+    params: ["interval"]
+
+resource_limits:
+  limit:
+    params: ["backend", "realm", "id", "max", "interval", "number", "dialplan", "context"]
+  limit_execute:
+    params: ["backend", "realm", "id", "max", "interval", "application", "app_args"]
+  mutex:
+    params: ["keyname", "state"]
+
+logging:
+  log:
+    params: ["log_level", "log_string"]
+  session_loglevel:
+    params: ["level"]
+
+system:
+  system:
+    params: ["command"]
+  bgsystem:
+    desc: background system command
+    params: ["command"]
+  sleep:
+    params: ["pausemilliseconds"]
+  break: {}
+  stop: {}
+
+filesystem:
+  mkdir:
+    params: ["path"]
+  rename:
+    params: ["from_path", "to_path"]
+
+info:
+  info: {}
+  send_display:
+    params: ["text"]
+  send_info:
+    params: ["info"]
+
+video:
+  video_refresh:
+    params: ["mode"]
+  video_decode:
+    params: ["mode"]
+  video_write_overlay:
+    params: ["path", "pos", "alpha"]
+  stop_video_write_overlay:
+    params: ["path"]
+  wait_for_video_ready:
+    params: ["ms"]
+
+dialplan:
+  execute_extension:
+    params: ["extension", "dialplan", "context"]
+  ivr:
+    params: ["menu_name"]
+
+misc:
+  capture:
+    params: ["varname", "data", "regex"]
+  capture_text: {}
+  check_acl:
+    params: ["ip", "acl_or_cidr", "hangup_cause"]
+  clear_speech_cache: {}
+  deflect:
+    params: ["destination"]
+  respond:
+    params: ["response"]
+  redirect:
+    params: ["destination"]
+  strftime:
+    params: ["epoch", "format_string"]
+  page:
+    params: ["variables", "channels"]
+  sound_test: {}
+  vad_test:
+    params: ["mode"]
+  event:
+    params: ["headers"]
+  set_name:
+    params: ["name"]
+  set_user:
+    params: ["user_domain", "prefix"]
+  set_profile_var:
+    params: ["varname", "value"]
+  reuse_caller_profile: {}
+  wait_for_answer: {}
+  remove_bugs:
+    params: ["function"]
+  set_media_stats: {}
+  set_zombie_exec: {}
+  recovery_refresh: {}
+  verbose_events: {}
+  preprocess: {}
+  refer_3pcc:
+    params: ["uuid", "use_upstream_header"]
+  refer_export_3pcc:
+    params: ["uuid"]
+  refer_to_uri_3pcc:
+    params: ["uri"]
+  subscribe_conference_3pcc: {}
+  presence:
+    params: ["rpid", "status", "id"]
+  privacy:
+    params: ["option"]
+  park_state: {}

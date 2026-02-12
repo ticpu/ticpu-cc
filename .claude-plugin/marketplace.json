@@ -11,7 +11,7 @@
     {
       "name": "freeswitch",
       "source": "./freeswitch/",
-      "description": "FreeSWITCH skills: usage/config, core C development, and mod_sofia SIP internals",
+      "description": "FreeSWITCH skills: usage/config, dialplan architect, core C development, and mod_sofia SIP internals",
       "category": "development",
       "keywords": ["freeswitch", "voip", "sip", "sofia", "rtp", "dialplan"]
     },

@@ -1,13 +1,13 @@
 ---
 name: usage
 description: >
-  ALWAYS load this skill before answering any FreeSWITCH configuration,
-  dialplan, or operational question. Covers XML dialplan execution (hunt vs
-  execute phases, inline execution, nested conditions), channel variable
-  scoping and lifecycle, hangup causes, ESL JSON API, time-of-day routing
-  with PCRE regex, SIP profile configuration and debugging. Also load the
-  sofia skill for SIP-specific questions, or the dev skill for C code and
-  codec internals.
+  ALWAYS load this skill before answering any FreeSWITCH configuration
+  or operational question. Covers channel variable scoping and lifecycle,
+  hangup causes, ESL JSON API, time-of-day routing with PCRE regex, SIP
+  profile configuration and debugging, state machine, and general
+  operational guidance. Also load the dialplan skill for writing/reviewing
+  dialplans, the sofia skill for SIP-specific questions, or the dev skill
+  for C code and codec internals.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
@@ -15,8 +15,8 @@ allowed-tools: Read, Grep, Glob, Bash, Task
 # FreeSWITCH Assistant
 
 You are helping with FreeSWITCH configuration and usage. FreeSWITCH is a
-modular telephony platform. This skill covers configuration, dialplan,
-variables, ESL, and basic SIP operation.
+modular telephony platform. This skill covers configuration, variables, ESL,
+state machine, and basic SIP operation.
 
 ## Key Concepts
 
@@ -63,6 +63,6 @@ Pick the relevant ones based on $ARGUMENTS before answering questions.
 - Consult the reference docs first, verify with source code when needed
 - Back answers with file:line evidence
 - Trust source code over community wiki (may be outdated)
-- Hunt-then-execute is the most common source of dialplan confusion
+- For writing/reviewing dialplans, dptools, channel variables → use the `dialplan` skill
 - For deep mod_sofia internals (flags, constants, NUA) → use the `sofia` skill
-- For core C code, codec implementations, build system → use the `freeswitch-dev` skill
+- For core C code, codec implementations, build system → use the `dev` skill

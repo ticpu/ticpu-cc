@@ -1,0 +1,1498 @@
+title: FreeSWITCH Channel Variables Reference
+description: Standard FreeSWITCH channel variables organized by functional category. Scope is "both" (inbound/outbound) by default unless specified otherwise
+---
+section: Core Channel Variables
+variables:
+- name: uuid
+  type: ro
+  example: Used for correlating CDRs, events, and API calls for a specific session
+- name: channel_name
+  type: ro
+  example: sofia/internal/1000@domain.com
+- name: call_uuid
+  type: ro
+  desc: UUID of the entire call (shared between A-leg and B-leg in a bridge)
+  example: Used to track the overall call across multiple legs
+- name: session_uuid
+  type: rw
+  desc: RFC 7989 Session-ID for the local session
+  example: Set for RFC 7989 compliance in SIP headers
+- name: remote_session_uuid
+  type: ro
+  desc: RFC 7989 Session-ID received from remote party
+  example: Tracks remote party's session identifier per RFC 7989
+- name: channel_state
+  type: ro
+  desc: Current state of the channel (NEW, INIT, ROUTING, EXECUTE, etc.)
+  example: Used for monitoring channel state progression
+- name: direction
+  type: ro
+  example: Values inbound or outbound
+- name: username
+  type: rw
+  example: Set by authentication modules, used in dialplan routing
+- name: domain_name
+  type: rw
+  example: Used for multi-tenant routing and authentication
+- name: network_addr
+  type: ro
+  desc: IP address of the remote endpoint
+  example: Source IP address for inbound calls, useful for ACL checks
+---
+section: Caller ID Variables
+variables:
+- name: caller_id_name
+  type: rw
+  example: Set to control outbound caller ID name presentation
+- name: caller_id_number
+  type: rw
+  desc: ANI (Automatic Number Identification)
+  example: Set to control outbound caller ID number presentation
+- name: callee_id_name
+  type: rw
+  example: Used for displaying called party information
+- name: callee_id_number
+  type: rw
+  example: Used for displaying called party number
+- name: effective_caller_id_name
+  type: rw
+  desc: Effective caller ID name after all transformations
+  example: Overrides caller_id_name for outbound presentation
+- name: effective_caller_id_number
+  type: rw
+  desc: Effective caller ID number after all transformations
+  example: Overrides caller_id_number for outbound presentation
+- name: effective_callee_id_name
+  type: rw
+  desc: Effective callee ID name after all transformations
+  example: Overrides callee_id_name for presentation
+- name: effective_callee_id_number
+  type: rw
+  desc: Effective callee ID number after all transformations
+  example: Overrides callee_id_number for presentation
+- name: effective_ani
+  type: rw
+  desc: Effective Automatic Number Identification
+  example: Used for billing identification separate from caller ID
+- name: effective_aniii
+  type: rw
+  desc: Automatic Number Identification Information Indicator
+  example: ANIII digits for SS7/ISDN networks
+- name: origination_caller_id_name
+  type: rw
+  scope: out
+  desc: Caller ID name to use when originating outbound calls
+  example: Set before originate to control outbound caller ID name
+- name: origination_caller_id_number
+  type: rw
+  scope: out
+  desc: Caller ID number to use when originating outbound calls
+  example: Set before originate to control outbound caller ID number
+- name: origination_callee_id_name
+  type: rw
+  scope: out
+  desc: Callee ID name to use when originating outbound calls
+  example: Set before originate to control called party display name
+- name: origination_callee_id_number
+  type: rw
+  scope: out
+  desc: Callee ID number to use when originating outbound calls
+  example: Set before originate to control called party number
+---
+section: Dialplan Variables
+variables:
+- name: destination_number
+  type: rw
+  example: Primary routing field in dialplan conditions
+- name: context
+  type: rw
+  example: Determines which dialplan section processes the call
+- name: dialplan
+  type: rw
+  desc: Dialplan module to use (XML, enum, etc.)
+  example: Default is XML, can be changed for alternate dialplan engines
+- name: dialed_user
+  type: ro
+  desc: The user portion of the dialed address
+  example: Extracted from the Request-URI or dialed number
+- name: dialed_domain
+  type: ro
+  desc: The domain portion of the dialed address
+  example: Extracted from the Request-URI or dialed address
+---
+section: Call Control Variables
+variables:
+- name: hangup_cause
+  type: ro
+  desc: Reason code for call termination
+  example: Values like NORMAL_CLEARING, USER_BUSY, NO_ANSWER, etc.
+- name: hangup_after_bridge
+  type: rw
+  desc: Hangup the A-leg immediately after bridge ends
+  example: Set to true to prevent post-bridge dialplan execution
+- name: park_after_bridge
+  type: rw
+  desc: Park the call after bridge ends instead of hanging up
+  example: Set to true to park after bridge for additional processing
+- name: park_after_early_bridge
+  type: rw
+  desc: Park the call after early bridge ends
+  example: Set to true to park after early media bridge
+- name: transfer_after_bridge
+  type: rw
+  desc: Transfer the call to specified extension after bridge
+  example: Format extension XML context to transfer after bridge
+- name: transfer_after_early_bridge
+  type: rw
+  desc: Transfer the call after early bridge
+  example: Format extension XML context for early bridge transfer
+- name: continue_on_fail
+  type: rw
+  desc: Continue dialplan execution on originate failure
+  example: Set to true or specific cause codes like USER_BUSY,NO_ANSWER
+- name: call_timeout
+  type: rw
+  scope: out
+  desc: Maximum time in seconds to wait for answer on outbound calls
+  example: Set to 30 for 30-second timeout on originate
+- name: answer_timeout
+  type: rw
+  desc: Timeout in milliseconds for answer processing
+  example: Used for answer supervision timing
+- name: progress_timeout
+  type: rw
+  scope: out
+  desc: Maximum time to wait for call progress
+  example: Timeout for receiving early media or ring indication
+- name: bridge_answer_timeout
+  type: rw
+  desc: Maximum time in seconds to wait for answer during bridge
+  example: Specific timeout for bridge operations
+- name: originate_timeout
+  type: rw
+  scope: out
+  desc: Total timeout for originate operation
+  example: Maximum time for entire originate attempt
+- name: leg_timeout
+  type: rw
+  scope: out
+  desc: Per-leg timeout for parallel originate
+  example: Individual timeout for each leg in forked dial
+- name: leg_delay_start
+  type: rw
+  scope: out
+  desc: Delay in seconds before starting a specific leg in parallel originate
+  example: Stagger outbound calls in enterprise originate
+---
+section: Bridge Variables
+variables:
+- name: bridge_to
+  type: rw
+  desc: Destination string for bridge operation
+  example: Internal variable used by bridge application
+- name: last_bridge_to
+  type: ro
+  desc: Destination string from the last bridge attempt
+  example: Useful for redialing or error handling after bridge
+- name: bridge_uuid
+  type: ro
+  example: References the other leg of a bridged call
+- name: bridge_channel
+  type: ro
+  example: Full channel name of the bridged party
+- name: bridge_hangup_cause
+  type: ro
+  desc: Hangup cause from the bridged channel
+  example: Determine why the other leg of the call hung up
+- name: signal_bridge_to
+  type: rw
+  desc: Destination for signaling-only bridge
+  example: Bridge signaling without media
+- name: signal_bond
+  type: rw
+  desc: Create signaling relationship between channels
+  example: UUID of channel to bond with for signaling
+- name: originate_signal_bond
+  type: rw
+  scope: out
+  desc: Signal bond to establish during originate
+  example: Set before originate to create signaling relationship
+- name: uuid_bridge
+  type: internal
+  desc: Internal flag indicating UUID bridge operation
+  example: System use only for UUID-based bridging
+- name: bridge_export_vars
+  type: rw
+  desc: List of variables to export to B-leg during bridge
+  example: Comma-separated list like var1,var2,var3
+- name: export_vars
+  type: rw
+  desc: List of variables to export to originated channels
+  example: Comma-separated list of variable names
+- name: bridge_pre_execute_app
+  type: rw
+  desc: Application to execute before bridge on A-leg
+  example: Set to application name like start_dtmf
+- name: bridge_pre_execute_data
+  type: rw
+  desc: Data/arguments for bridge_pre_execute_app
+  example: Arguments for the pre-bridge application
+- name: bridge_pre_execute_aleg_app
+  type: rw
+  desc: Application to execute on A-leg before bridge
+  example: A-leg specific pre-bridge application
+- name: bridge_pre_execute_aleg_data
+  type: rw
+  desc: Data for bridge_pre_execute_aleg_app
+  example: Arguments for A-leg pre-bridge application
+- name: bridge_pre_execute_bleg_app
+  type: rw
+  desc: Application to execute on B-leg before bridge
+  example: B-leg specific pre-bridge application
+- name: bridge_pre_execute_bleg_data
+  type: rw
+  desc: Data for bridge_pre_execute_bleg_app
+  example: Arguments for B-leg pre-bridge application
+- name: exec_after_bridge_app
+  type: rw
+  desc: Application to execute after bridge ends
+  example: Application name to run post-bridge
+- name: exec_after_bridge_arg
+  type: rw
+  desc: Arguments for exec_after_bridge_app
+  example: Data/arguments for post-bridge application
+- name: bridge_filter_dtmf
+  type: rw
+  desc: Filter DTMF from crossing the bridge
+  example: Set to true to prevent DTMF from passing to other leg
+- name: bridge_generate_comfort_noise
+  type: rw
+  desc: Generate comfort noise during bridge
+  example: Set to true to generate CNG on silent bridges
+- name: bridge_terminate_key
+  type: rw
+  desc: DTMF key to terminate the bridge
+  example: Set to * to allow * key to end bridge
+---
+section: Execute-On Hook Variables
+variables:
+- name: execute_on_answer
+  type: rw
+  desc: Applications/commands to execute when call is answered
+  example: app::arg format, can have multiple comma-separated
+- name: execute_on_pre_answer
+  type: rw
+  desc: Execute when call receives early media (183/180)
+  example: app::arg format for early media events
+- name: execute_on_media
+  type: rw
+  desc: Execute when media path is established
+  example: app::arg format for media establishment
+- name: execute_on_ring
+  type: rw
+  desc: Execute when ringback is received
+  example: app::arg format for ring events
+- name: execute_on_originate
+  type: rw
+  scope: out
+  desc: Execute on outbound channel at originate time
+  example: app::arg format for origination
+- name: execute_on_post_originate
+  type: rw
+  scope: out
+  desc: Execute after originate completes
+  example: app::arg format after origination
+- name: execute_on_pre_originate
+  type: rw
+  scope: out
+  desc: Execute before originate begins
+  example: app::arg format before origination
+- name: execute_on_pre_bridge
+  type: rw
+  desc: Execute immediately before bridge
+  example: app::arg format for pre-bridge execution
+- name: execute_on_post_bridge
+  type: rw
+  desc: Execute immediately after bridge ends
+  example: app::arg format for post-bridge execution
+- name: execute_on_tone_detect
+  type: rw
+  desc: Execute when specified tone is detected
+  example: app::arg format for tone detection events
+---
+section: API-On Hook Variables
+variables:
+- name: api_on_answer
+  type: rw
+  desc: API commands to execute when call is answered
+  example: api_command arg1 arg2 format
+- name: api_on_pre_answer
+  type: rw
+  desc: API commands to execute on pre-answer
+  example: api_command arg1 arg2 format
+- name: api_on_media
+  type: rw
+  desc: API commands to execute when media is established
+  example: api_command arg1 arg2 format
+- name: api_on_ring
+  type: rw
+  desc: API commands to execute on ring
+  example: api_command arg1 arg2 format
+- name: api_on_originate
+  type: rw
+  scope: out
+  desc: API commands to execute on originate
+  example: api_command arg1 arg2 format
+- name: api_on_post_originate
+  type: rw
+  scope: out
+  desc: API commands to execute after originate
+  example: api_command arg1 arg2 format
+- name: api_on_pre_originate
+  type: rw
+  scope: out
+  desc: API commands to execute before originate
+  example: api_command arg1 arg2 format
+- name: api_before_bridge
+  type: rw
+  desc: API commands to execute before bridge
+  example: api_command arg1 arg2 format
+- name: api_after_bridge
+  type: rw
+  desc: API commands to execute after bridge
+  example: api_command arg1 arg2 format
+- name: api_hangup_hook
+  type: rw
+  desc: API commands to execute on hangup
+  example: api_command arg1 arg2 format for hangup handling
+- name: api_reporting_hook
+  type: rw
+  desc: API commands for reporting/CDR purposes
+  example: api_command arg1 arg2 for custom reporting
+---
+section: Media Control Variables
+variables:
+- name: bypass_media
+  type: rw
+  desc: Enable bypass media mode (signaling only, no media proxy)
+  example: Set to true to bypass media through FreeSWITCH
+- name: bypass_media_after_bridge
+  type: rw
+  desc: Enable bypass media after bridge completes
+  example: Set to true to bypass media for post-bridge processing
+- name: proxy_media
+  type: rw
+  desc: Enable proxy media mode (proxy RTP without transcoding)
+  example: Set to true to proxy media without processing
+- name: inbound_codec_prefs
+  type: rw
+  scope: in
+  desc: Preferred codec list for inbound calls
+  example: PCMU,PCMA,G729 - comma-separated codec list
+- name: outbound_codec_prefs
+  type: rw
+  scope: out
+  desc: Preferred codec list for outbound calls
+  example: PCMU,PCMA,G729 - comma-separated codec list
+- name: codec_string
+  type: rw
+  desc: Codec string for the call
+  example: Internal codec representation
+- name: absolute_codec_string
+  type: rw
+  desc: Absolute codec string (no inheritance)
+  example: Override all codec negotiation with specific codecs
+- name: ep_codec_string
+  type: rw
+  desc: Endpoint-specific codec string
+  example: Codec string from endpoint configuration
+- name: inherit_codec
+  type: rw
+  desc: Inherit codec from another channel
+  example: Set to true to inherit codec settings
+- name: read_codec
+  type: ro
+  example: Current codec for receiving audio
+- name: write_codec
+  type: ro
+  example: Current codec for sending audio
+- name: video_possible
+  type: ro
+  desc: Indicates if video is possible for this call
+  example: true if video capability detected
+- name: text_possible
+  type: ro
+  desc: Indicates if text/RTT is possible for this call
+  example: true if text capability detected
+---
+section: RTP/Media Variables
+variables:
+- name: local_media_ip
+  type: ro
+  desc: Local IP address for RTP media (audio)
+  example: IP address FreeSWITCH uses for media
+- name: local_media_port
+  type: ro
+  desc: Local port for RTP media (audio)
+  example: Port number for audio RTP stream
+- name: advertised_media_ip
+  type: rw
+  desc: IP address advertised in SDP for media
+  example: Override for NAT scenarios, IP to advertise externally
+- name: remote_media_ip
+  type: ro
+  desc: Remote party's IP address for RTP media (audio)
+  example: IP address of remote media endpoint
+- name: remote_media_port
+  type: ro
+  desc: Remote party's port for RTP media (audio)
+  example: Port number for remote audio RTP stream
+- name: local_video_ip
+  type: ro
+  desc: Local IP address for RTP video
+  example: IP address for video RTP stream
+- name: local_video_port
+  type: ro
+  desc: Local port for RTP video
+  example: Port number for video RTP stream
+- name: remote_video_ip
+  type: ro
+  desc: Remote party's IP address for RTP video
+  example: IP address of remote video endpoint
+- name: remote_video_port
+  type: ro
+  desc: Remote party's port for RTP video
+  example: Port number for remote video RTP stream
+- name: local_text_ip
+  type: ro
+  desc: Local IP address for text/RTT
+  example: IP address for text RTP stream
+- name: local_text_port
+  type: ro
+  desc: Local port for text/RTT
+  example: Port number for text RTP stream
+- name: rtp_secure_media
+  type: rw
+  desc: Enable SRTP (secure RTP) for the call
+  example: Set to true to require SRTP, false to disable
+- name: rtp_secure_media_inbound
+  type: rw
+  scope: in
+  desc: SRTP requirement for inbound calls
+  example: Set to true to require SRTP on inbound
+- name: rtp_secure_media_outbound
+  type: rw
+  scope: out
+  desc: SRTP requirement for outbound calls
+  example: Set to true to require SRTP on outbound
+- name: rtp_secure_media_negotiated
+  type: ro
+  desc: Indicates if SRTP was successfully negotiated
+  example: true if SRTP is active for audio
+- name: rtp_has_crypto
+  type: ro
+  desc: Indicates if audio crypto keys are present
+  example: true if SRTP keys available for audio
+- name: rtp_has_video_crypto
+  type: ro
+  desc: Indicates if video crypto keys are present
+  example: true if SRTP keys available for video
+- name: rtp_secure_audio_confirmed
+  type: ro
+  desc: Audio SRTP confirmation status
+  example: true when audio SRTP is confirmed active
+- name: rtp_secure_video_confirmed
+  type: ro
+  desc: Video SRTP confirmation status
+  example: true when video SRTP is confirmed active
+- name: rtp_autoflush_during_bridge
+  type: rw
+  desc: Automatically flush jitter buffer during bridge
+  example: Set to true to clear jitter buffer on bridge
+- name: rtp_jitter_buffer_during_bridge
+  type: rw
+  desc: Enable jitter buffer during bridge
+  example: Set to true to maintain jitter buffer while bridged
+- name: rtp_jitter_buffer_plc
+  type: rw
+  desc: Enable packet loss concealment in jitter buffer
+  example: Set to true to enable PLC
+- name: jitterbuffer_msec
+  type: rw
+  desc: Jitter buffer size in milliseconds
+  example: Set to 60 for 60ms jitter buffer
+- name: rtp_timer_name
+  type: rw
+  desc: Timer to use for RTP
+  example: soft or timerfd depending on platform
+- name: rtp_use_timer_name
+  type: ro
+  desc: Actual timer name in use for RTP
+  example: Reports active timer
+- name: rtp_timeout_sec
+  type: rw
+  desc: RTP timeout in seconds (no RTP received)
+  example: Set to 300 to hangup after 5 minutes of no RTP
+- name: rtp_hold_timeout_sec
+  type: rw
+  desc: RTP timeout in seconds while on hold
+  example: Set to 1800 for 30-minute hold timeout
+- name: rtp_use_codec_string
+  type: rw
+  desc: Force specific codec string for RTP
+  example: Override negotiated codec
+- name: rtp_use_codec_name
+  type: rw
+  desc: Force specific codec by name
+  example: PCMU to force G.711 u-law
+- name: rtp_use_codec_rate
+  type: rw
+  desc: Force specific codec sample rate
+  example: 8000 for 8kHz sampling
+- name: rtp_use_codec_ptime
+  type: rw
+  desc: Force specific packetization time
+  example: 20 for 20ms ptime
+- name: rtp_use_codec_channels
+  type: rw
+  desc: Force specific number of audio channels
+  example: 1 for mono, 2 for stereo
+- name: rtp_use_pt
+  type: rw
+  desc: Force specific RTP payload type
+  example: 0 for PCMU, 8 for PCMA
+- name: rtp_use_ssrc
+  type: rw
+  desc: Force specific SSRC for RTP
+  example: Set specific SSRC value
+- name: rtp_enable_vad_in
+  type: rw
+  desc: Enable voice activity detection on input
+  example: Set to true to detect silence on input
+- name: rtp_enable_vad_out
+  type: rw
+  desc: Enable voice activity detection on output
+  example: Set to true to detect silence on output
+- name: rtp_disable_vad_in
+  type: rw
+  desc: Disable voice activity detection on input
+  example: Set to true to disable VAD on input
+- name: rtp_disable_vad_out
+  type: rw
+  desc: Disable voice activity detection on output
+  example: Set to true to disable VAD on output
+- name: suppress_cng
+  type: rw
+  desc: Suppress comfort noise generation
+  example: Set to true to disable CNG
+- name: rtp_local_sdp_str
+  type: ro
+  desc: Local SDP string for the session
+  example: Full SDP generated by FreeSWITCH
+- name: switch_r_sdp
+  type: ro
+  desc: Remote SDP received from peer
+  example: SDP from remote party
+- name: switch_l_sdp
+  type: ro
+  desc: Local SDP sent to peer
+  example: SDP sent to remote party
+- name: switch_m_sdp
+  type: ro
+  desc: Media SDP (merged/bridged)
+  example: SDP for media bridge
+- name: disable_rtp_auto_adjust
+  type: rw
+  desc: Disable automatic RTP IP adjustment
+  example: Set to true to prevent RTP target changes
+- name: rtp_rewrite_timestamps
+  type: rw
+  desc: Rewrite RTP timestamps
+  example: Set to true to rewrite timestamps
+- name: rtp_video_max_bandwidth_in
+  type: rw
+  desc: Maximum incoming video bandwidth in bits/sec
+  example: 1024000 for 1Mbps limit
+- name: rtp_video_max_bandwidth_out
+  type: rw
+  desc: Maximum outgoing video bandwidth in bits/sec
+  example: 1024000 for 1Mbps limit
+- name: media_timeout
+  type: rw
+  desc: Media timeout in seconds (alias for rtp_timeout_sec)
+  example: Set to 120 for 2-minute media timeout
+---
+section: SIP Variables
+variables:
+- name: sip_profile_name
+  type: ro
+  desc: Name of the SIP profile handling the call
+  example: internal, external, etc.
+- name: sip_call_id
+  type: ro
+  desc: SIP Call-ID header value
+  example: Unique identifier for the SIP dialog
+- name: sip_from_user
+  type: ro
+  desc: Username from SIP From header
+  example: User portion of From URI
+- name: sip_from_host
+  type: ro
+  desc: Domain from SIP From header
+  example: Domain portion of From URI
+- name: sip_from_uri
+  type: ro
+  desc: Full SIP From URI
+  example: Complete From header URI
+- name: sip_from_display
+  type: ro
+  desc: Display name from SIP From header
+  example: Display name portion of From header
+- name: sip_from_tag
+  type: ro
+  desc: Tag parameter from SIP From header
+  example: From tag for dialog identification
+- name: sip_to_user
+  type: ro
+  desc: Username from SIP To header
+  example: User portion of To URI
+- name: sip_to_host
+  type: ro
+  desc: Domain from SIP To header
+  example: Domain portion of To URI
+- name: sip_to_uri
+  type: ro
+  desc: Full SIP To URI
+  example: Complete To header URI
+- name: sip_to_display
+  type: ro
+  desc: Display name from SIP To header
+  example: Display name portion of To header
+- name: sip_to_tag
+  type: ro
+  desc: Tag parameter from SIP To header
+  example: To tag for dialog identification
+- name: sip_contact_uri
+  type: ro
+  desc: SIP Contact header URI
+  example: Contact URI for responses
+- name: sip_contact_user
+  type: ro
+  desc: Username from SIP Contact header
+  example: User portion of Contact URI
+- name: sip_contact_params
+  type: ro
+  desc: Parameters from SIP Contact header
+  example: Contact header parameters
+- name: sip_req_uri
+  type: ro
+  desc: SIP Request-URI
+  example: Request-URI from INVITE
+- name: sip_req_user
+  type: ro
+  desc: Username from SIP Request-URI
+  example: User portion of Request-URI
+- name: sip_via_host
+  type: ro
+  desc: Host from top Via header
+  example: Via header host value
+- name: sip_via_port
+  type: ro
+  desc: Port from top Via header
+  example: Via header port value
+- name: sip_via_protocol
+  type: ro
+  desc: Protocol from top Via header
+  example: UDP, TCP, TLS, etc.
+- name: sip_via_rport
+  type: ro
+  desc: rport parameter from Via header
+  example: Actual source port (NAT detection)
+- name: sip_network_ip
+  type: ro
+  desc: Network IP address for SIP signaling
+  example: IP address of SIP endpoint
+- name: sip_network_port
+  type: ro
+  desc: Network port for SIP signaling
+  example: Port number of SIP endpoint
+- name: sip_received_ip
+  type: ro
+  desc: IP address from received parameter in Via
+  example: Actual source IP (NAT detection)
+- name: sip_received_port
+  type: ro
+  desc: Port from received parameter
+  example: Actual source port (NAT detection)
+- name: sip_user_agent
+  type: ro
+  desc: Value of SIP User-Agent header
+  example: Identifies client software
+- name: sip_authorized
+  type: ro
+  scope: in
+  desc: Indicates successful SIP authentication
+  example: Set to true after successful auth
+- name: sip_acl_authed_by
+  type: ro
+  scope: in
+  desc: ACL list that authorized the request
+  example: Name of ACL that matched
+- name: sip_acl_token
+  type: ro
+  scope: in
+  desc: Token used for ACL authorization
+  example: Token value for auth
+- name: sip_nat_detected
+  type: ro
+  desc: Indicates NAT detection
+  example: true if NAT detected via Via/Contact
+- name: sip_auto_answer
+  type: rw
+  scope: out
+  desc: Request auto-answer on compatible devices
+  example: Set to true to request auto-answer
+- name: sip_auto_answer_detected
+  type: ro
+  scope: in
+  desc: Indicates auto-answer was requested by peer
+  example: true if Call-Info indicates auto-answer
+- name: sip_h_*
+  type: ro
+  desc: Prefix for reading arbitrary SIP headers
+  example: sip_h_X-Custom-Header reads X-Custom-Header value
+- name: sip_ph_*
+  type: rw
+  desc: Prefix for setting SIP headers on replies
+  example: sip_ph_X-Custom sets X-Custom header on responses
+- name: sip_invite_call_id
+  type: ro
+  desc: Call-ID from the initial INVITE
+  example: Original INVITE Call-ID (persists through transfers)
+- name: sip_invite_to_uri
+  type: ro
+  desc: To URI from initial INVITE
+  example: Original To URI before transfers
+- name: sip_invite_from_uri
+  type: ro
+  desc: From URI from initial INVITE
+  example: Original From URI
+- name: sip_invite_domain
+  type: ro
+  desc: Domain from initial INVITE Request-URI
+  example: Original domain before transfers
+- name: sip_invite_req_uri
+  type: ro
+  desc: Request-URI from initial INVITE
+  example: Original Request-URI
+- name: sip_invite_route_uri
+  type: ro
+  desc: Route URI from initial INVITE
+  example: Route header from original INVITE
+- name: sip_refer_to
+  type: ro
+  desc: Refer-To header value for transfers
+  example: Transfer target from REFER
+- name: sip_referred_by
+  type: ro
+  desc: Referred-By header value
+  example: Who initiated the transfer
+- name: sip_redirect_dialstring
+  type: ro
+  desc: Dialstring from 3xx redirect
+  example: Generated dialstring from Contact in 3xx
+- name: sip_redirect_count
+  type: ro
+  desc: Number of redirects followed
+  example: Count of 3xx redirects
+- name: sip_redirect_context
+  type: rw
+  desc: Context to use for redirect processing
+  example: Dialplan context for handling redirects
+- name: sip_redirect_dialplan
+  type: rw
+  desc: Dialplan to use for redirect processing
+  example: Dialplan module for handling redirects
+- name: sip_hangup_disposition
+  type: ro
+  desc: SIP-specific hangup disposition
+  example: send_bye, recv_bye, send_cancel, etc.
+- name: sip_hangup_phrase
+  type: ro
+  desc: SIP reason phrase for hangup
+  example: Reason text from SIP response
+- name: sip_term_status
+  type: ro
+  desc: SIP status code on termination
+  example: 200, 486, etc.
+- name: sip_term_cause
+  type: ro
+  desc: Q.850 cause code from termination
+  example: Q.850 cause value
+- name: sip_local_network_addr
+  type: ro
+  desc: Local network address for SIP
+  example: IP address of local SIP interface
+- name: sip_recover_via
+  type: rw
+  desc: Via header to restore after recovery
+  example: Used in call recovery scenarios
+- name: sip_recover_contact
+  type: rw
+  desc: Contact header to restore after recovery
+  example: Used in call recovery scenarios
+- name: sip_sticky_contact
+  type: rw
+  desc: Make Contact header sticky across transactions
+  example: Set to true to maintain Contact
+- name: sip_cid_type
+  type: rw
+  desc: Caller ID type for SIP headers
+  example: rpid, pid, none
+- name: sip_copy_custom_headers
+  type: rw
+  desc: Enable copying custom SIP headers
+  example: Set to true to copy X- headers
+- name: sip_ignore_remote_cid
+  type: rw
+  desc: Ignore remote caller ID updates
+  example: Set to true to ignore CID changes
+- name: sip_wait_for_aleg_ack
+  type: rw
+  desc: Wait for ACK on A-leg before proceeding
+  example: Set to true for better call control
+- name: sip_enable_soa
+  type: rw
+  desc: Enable SIP Session Description Protocol offer/answer
+  example: Set to true to enable SOA processing
+- name: sip_disable_recording
+  type: rw
+  desc: Disable recording for this SIP call
+  example: Set to true to prevent recording
+---
+section: Sofia-Specific Variables
+variables:
+- name: sofia_profile_name
+  type: ro
+  desc: Sofia-SIP profile name
+  example: Profile handling the call
+- name: sofia_profile_domain_name
+  type: ro
+  desc: Domain name from Sofia profile configuration
+  example: Configured domain for the profile
+- name: sofia_profile_url
+  type: ro
+  desc: Sofia profile URL
+  example: Full URL for the Sofia profile
+- name: sofia_hold_inactive
+  type: rw
+  desc: Use inactive instead of sendonly/recvonly for hold
+  example: Set to true for RFC-compliant hold
+- name: sofia_record_file
+  type: rw
+  desc: File path for Sofia recording
+  example: Path for recording at Sofia level
+---
+section: Recording Variables
+variables:
+- name: RECORD_TITLE
+  type: rw
+  desc: Title metadata for recording file
+  example: Set to add title tag to recording
+- name: RECORD_ARTIST
+  type: rw
+  desc: Artist metadata for recording file
+  example: Set to add artist tag to recording
+- name: RECORD_COMMENT
+  type: rw
+  desc: Comment metadata for recording file
+  example: Set to add comment tag to recording
+- name: RECORD_COPYRIGHT
+  type: rw
+  desc: Copyright metadata for recording file
+  example: Set to add copyright tag to recording
+- name: RECORD_SOFTWARE
+  type: rw
+  desc: Software metadata for recording file
+  example: Set to add software tag to recording
+- name: RECORD_DATE
+  type: rw
+  desc: Date metadata for recording file
+  example: Set to add date tag to recording
+- name: RECORD_STEREO
+  type: rw
+  desc: Enable stereo recording (legs on separate channels)
+  example: Set to true for stereo recording
+- name: RECORD_MIN_SEC
+  type: rw
+  desc: Minimum recording length in seconds
+  example: Set to 5 to only save recordings >= 5 seconds
+- name: RECORD_ANSWER_REQ
+  type: rw
+  desc: Require answer before starting recording
+  example: Set to true to start recording only after answer
+- name: RECORD_HANGUP_ON_ERROR
+  type: rw
+  desc: Hangup call if recording fails
+  example: Set to true to hangup on recording errors
+- name: RECORD_WRITE_ONLY
+  type: rw
+  desc: Record only the write (outbound) leg
+  example: Set to true to record only outbound audio
+- name: record_post_process_exec_app
+  type: rw
+  desc: Application to execute after recording completes
+  example: Application name to process recording
+- name: record_post_process_exec_api
+  type: rw
+  desc: API command to execute after recording completes
+  example: API command with recording path as argument
+---
+section: CDR Variables
+variables:
+- name: process_cdr
+  type: rw
+  desc: Enable CDR processing for this call
+  example: Set to true to generate CDR (default)
+- name: force_process_cdr
+  type: rw
+  desc: Force CDR processing even if normally skipped
+  example: Set to true to always generate CDR
+- name: skip_cdr_causes
+  type: rw
+  desc: List of hangup causes to skip CDR generation
+  example: ORIGINATOR_CANCEL,LOSE_RACE to skip certain causes
+- name: copy_xml_cdr
+  type: rw
+  desc: Copy XML CDR to specified file
+  example: Set to file path to save XML CDR
+- name: copy_json_cdr
+  type: rw
+  desc: Copy JSON CDR to specified file
+  example: Set to file path to save JSON CDR
+- name: accountcode
+  type: rw
+  desc: Account code for billing/CDR
+  example: Set to account identifier for billing
+---
+section: Application State Variables
+variables:
+- name: current_application
+  type: ro
+  desc: Currently executing application name
+  example: Name of application being executed
+- name: current_application_data
+  type: ro
+  desc: Data/arguments for current application
+  example: Arguments passed to current application
+- name: current_application_response
+  type: ro
+  desc: Response from current application
+  example: Return value from application
+- name: last_app
+  type: ro
+  desc: Last application that was executed
+  example: Previous application name
+- name: last_arg
+  type: ro
+  desc: Arguments from last application executed
+  example: Previous application arguments
+---
+section: Timing/Duration Variables
+variables:
+- name: start_epoch
+  type: ro
+  desc: Call start time in Unix epoch seconds
+  example: Timestamp when call started
+- name: start_stamp
+  type: ro
+  desc: Call start time as formatted string
+  example: Human-readable start time
+- name: start_uepoch
+  type: ro
+  desc: Call start time in Unix epoch microseconds
+  example: High-precision start timestamp
+- name: answer_epoch
+  type: ro
+  desc: Call answer time in Unix epoch seconds
+  example: Timestamp when call was answered
+- name: answer_stamp
+  type: ro
+  desc: Call answer time as formatted string
+  example: Human-readable answer time
+- name: answer_uepoch
+  type: ro
+  desc: Call answer time in Unix epoch microseconds
+  example: High-precision answer timestamp
+- name: bridge_epoch
+  type: ro
+  desc: Bridge start time in Unix epoch seconds
+  example: Timestamp when bridge started
+- name: bridge_stamp
+  type: ro
+  desc: Bridge start time as formatted string
+  example: Human-readable bridge start time
+- name: bridge_uepoch
+  type: ro
+  desc: Bridge start time in Unix epoch microseconds
+  example: High-precision bridge timestamp
+- name: end_epoch
+  type: ro
+  desc: Call end time in Unix epoch seconds
+  example: Timestamp when call ended
+- name: end_stamp
+  type: ro
+  desc: Call end time as formatted string
+  example: Human-readable end time
+- name: end_uepoch
+  type: ro
+  desc: Call end time in Unix epoch microseconds
+  example: High-precision end timestamp
+- name: duration
+  type: ro
+  example: From start to end
+- name: billsec
+  type: ro
+  desc: Billable seconds (answer to end)
+  example: Duration for billing (answered calls only)
+- name: progresssec
+  type: ro
+  desc: Progress duration in seconds
+  example: Time from start to progress/answer
+- name: answersec
+  type: ro
+  desc: Answer duration in seconds
+  example: Time from start to answer
+- name: waitsec
+  type: ro
+  desc: Wait duration in seconds
+  example: Time spent waiting
+- name: progress_mediasec
+  type: ro
+  desc: Progress media duration in seconds
+  example: Time in early media state
+- name: flow_billsec
+  type: ro
+  desc: Billable seconds for media flow
+  example: Billable time based on media flow
+- name: mduration
+  type: ro
+  desc: Media duration in milliseconds
+  example: Total media duration
+- name: billmsec
+  type: ro
+  desc: Billable milliseconds
+  example: High-precision billable duration
+- name: progressmsec
+  type: ro
+  desc: Progress duration in milliseconds
+  example: High-precision progress time
+- name: answermsec
+  type: ro
+  desc: Answer duration in milliseconds
+  example: High-precision answer time
+- name: waitmsec
+  type: ro
+  desc: Wait duration in milliseconds
+  example: High-precision wait time
+- name: progress_mediamsec
+  type: ro
+  desc: Progress media duration in milliseconds
+  example: High-precision early media time
+- name: flow_billmsec
+  type: ro
+  desc: Billable milliseconds for media flow
+  example: High-precision media flow billing
+- name: uduration
+  type: ro
+  desc: Total duration in microseconds
+  example: Ultra-high-precision total duration
+- name: billusec
+  type: ro
+  desc: Billable microseconds
+  example: Ultra-high-precision billable time
+- name: progressusec
+  type: ro
+  desc: Progress duration in microseconds
+  example: Ultra-high-precision progress time
+- name: answerusec
+  type: ro
+  desc: Answer duration in microseconds
+  example: Ultra-high-precision answer time
+- name: waitusec
+  type: ro
+  desc: Wait duration in microseconds
+  example: Ultra-high-precision wait time
+- name: progress_mediausec
+  type: ro
+  desc: Progress media duration in microseconds
+  example: Ultra-high-precision early media time
+- name: flow_billusec
+  type: ro
+  desc: Billable microseconds for media flow
+  example: Ultra-high-precision media flow billing
+---
+section: Transfer Variables
+variables:
+- name: transfer_history
+  type: ro
+  desc: History of transfers for this call
+  example: Tracks transfer chain
+- name: transfer_source
+  type: ro
+  desc: Source of the transfer
+  example: Identifies who/what initiated transfer
+- name: transfer_disposition
+  type: ro
+  desc: Result of transfer operation
+  example: success, failure, etc.
+- name: transfer_fallback_extension
+  type: rw
+  desc: Extension to use if transfer fails
+  example: Fallback destination for failed transfers
+- name: transfer_ringback
+  type: rw
+  desc: Ringback to play during transfer
+  example: Audio file to play while transferring
+- name: attended_transfer_no_copy
+  type: rw
+  desc: Don't copy variables during attended transfer
+  example: Set to true to prevent variable copying
+- name: att_xfer_result
+  type: ro
+  desc: Result of attended transfer
+  example: success, timeout, cancel
+- name: att_xfer_destination_number
+  type: ro
+  desc: Destination for attended transfer
+  example: Number being transferred to
+- name: att_xfer_callee_id_name
+  type: rw
+  desc: Callee ID name for attended transfer target
+  example: Display name for transfer target
+- name: att_xfer_callee_id_number
+  type: rw
+  desc: Callee ID number for attended transfer target
+  example: Number for transfer target
+- name: att_xfer_kill_uuid
+  type: internal
+  desc: UUID of channel to kill after attended transfer
+  example: System use for transfer cleanup
+- name: attxfer_cancel_key
+  type: rw
+  desc: DTMF key to cancel attended transfer
+  example: Set to * to cancel with star key
+- name: attxfer_conf_key
+  type: rw
+  desc: DTMF key to conference during attended transfer
+  example: Set to 3 to create conference
+- name: attxfer_hangup_key
+  type: rw
+  desc: DTMF key to hangup during attended transfer
+  example: Set to 1 to hangup transfer attempt
+- name: blind_transfer_uuid
+  type: ro
+  desc: UUID of channel involved in blind transfer
+  example: Tracks blind transfer relationship
+---
+section: Hold Music Variables
+variables:
+- name: hold_music
+  type: rw
+  desc: Music or audio to play when call is on hold
+  example: Path to audio file or stream
+- name: temp_hold_music
+  type: rw
+  desc: Temporary hold music override
+  example: Temporary MOH for specific hold operation
+- name: holding_uuid
+  type: ro
+  desc: UUID of channel that put this call on hold
+  example: Identifies who initiated hold
+- name: soft_holding_uuid
+  type: ro
+  desc: UUID for soft hold relationship
+  example: Soft hold (no MOH) relationship
+---
+section: Origination-Specific Variables
+variables:
+- name: originator
+  type: ro
+  scope: out
+  desc: Identifier of the originating channel
+  example: UUID or name of A-leg that originated this call
+- name: originator_codec
+  type: ro
+  scope: out
+  desc: Audio codec from originating channel
+  example: Codec used by originator
+- name: originator_video_codec
+  type: ro
+  scope: out
+  desc: Video codec from originating channel
+  example: Video codec used by originator
+- name: ignore_early_media
+  type: rw
+  scope: out
+  desc: Ignore early media during originate
+  example: Set to true to wait for full answer
+- name: group_confirm_key
+  type: rw
+  scope: out
+  desc: DTMF key required to confirm group dial
+  example: Set to 1 to require pressing 1 to accept call
+- name: group_confirm_file
+  type: rw
+  scope: out
+  desc: Audio file to play for group dial confirmation
+  example: Path to prompt asking to accept call
+- name: fail_on_single_reject
+  type: rw
+  scope: out
+  desc: Fail entire dial if single leg rejects
+  example: Set to specific causes like USER_BUSY
+- name: origination_privacy
+  type: rw
+  scope: out
+  desc: Privacy settings for origination
+  example: screen, hide_name, hide_number
+---
+section: Playback Control Variables
+variables:
+- name: playback_terminators
+  type: rw
+  desc: DTMF digits that terminate playback
+  example: Set to any or specific digits like *#
+- name: playback_terminator_used
+  type: ro
+  desc: DTMF digit that was used to terminate playback
+  example: Which terminator key was pressed
+- name: playback_delimiter
+  type: rw
+  desc: Delimiter for multiple playback files
+  example: Character separating file paths
+- name: playback_sleep_val
+  type: rw
+  desc: Sleep time between playback files
+  example: Milliseconds to pause between files
+---
+section: DTMF Variables
+variables:
+- name: dtmf_type
+  type: rw
+  desc: DTMF detection type
+  example: rfc2833, inband, info
+- name: sensitive_dtmf
+  type: rw
+  desc: Mark DTMF as sensitive (mask in logs)
+  example: Set to true to hide DTMF in logs
+- name: drop_dtmf
+  type: rw
+  desc: Drop DTMF from audio stream
+  example: Set to true to remove DTMF from audio
+- name: drop_dtmf_masking_file
+  type: rw
+  desc: Audio file to play to mask dropped DTMF
+  example: Path to comfort tone to cover DTMF gaps
+- name: drop_dtmf_masking_digits
+  type: rw
+  desc: Specific digits to mask when dropping DTMF
+  example: Digits like 0123456789*#
+- name: bind_digit_action
+  type: rw
+  desc: Bind DTMF sequences to actions
+  example: Realm,sequence,command format
+- name: bind_digit_digit_timeout
+  type: rw
+  desc: Timeout for digit sequence completion
+  example: Milliseconds to wait for next digit
+- name: bind_digit_input_timeout
+  type: rw
+  desc: Overall timeout for digit input
+  example: Total time to wait for digit sequence
+- name: bind_meta_key
+  type: rw
+  desc: Meta key for DTMF binding
+  example: Key to activate meta functions
+---
+section: Read/Input Variables
+variables:
+- name: read_result
+  type: ro
+  desc: Result from read/play_and_get_digits operation
+  example: Digits collected from user
+- name: read_terminator_used
+  type: ro
+  desc: Terminator key used in read operation
+  example: Which key ended digit collection
+---
+section: Presence Variables
+variables:
+- name: presence_id
+  type: rw
+  desc: Presence ID for the channel
+  example: user@domain for presence updates
+- name: presence_data
+  type: rw
+  desc: Custom presence data
+  example: Additional presence information
+---
+section: System Variables
+variables:
+- name: session_in_hangup_hook
+  type: ro
+  desc: Indicates execution is in hangup hook
+  example: true when executing hangup hook
+- name: proto_specific_hangup_cause
+  type: ro
+  desc: Protocol-specific hangup cause
+  example: SIP status code or ISDN cause
+- name: endpoint_disposition
+  type: ro
+  desc: Endpoint-specific disposition
+  example: Endpoint's view of call result
+- name: max_forwards
+  type: rw
+  desc: SIP Max-Forwards header value
+  example: Set to 70 (default) to control loop prevention
+- name: max_session_transfers
+  type: rw
+  desc: Maximum number of transfers allowed
+  example: Set to 5 to limit transfer chains
+- name: disable_app_log
+  type: rw
+  desc: Disable application logging for this call
+  example: Set to true to reduce log verbosity
+- name: enable_heartbeat_events
+  type: rw
+  desc: Enable periodic heartbeat events
+  example: Set to 60 for events every 60 seconds
+- name: audio_spool_path
+  type: rw
+  desc: Path for audio spooling
+  example: Directory for temporary audio files
+- name: ignore_display_updates
+  type: rw
+  desc: Ignore display updates from endpoint
+  example: Set to true to ignore UPDATE messages with display changes
+- name: send_silence_when_idle
+  type: rw
+  desc: Send silence packets when no audio
+  example: Set to true to send silence during idle
+- name: passthru_ptime_mismatch
+  type: rw
+  desc: Allow ptime mismatch in passthrough mode
+  example: Set to true to allow different ptimes
+- name: cache_speech_handles
+  type: rw
+  desc: Cache TTS/ASR handles for reuse
+  example: Set to true to improve TTS performance
+- name: 3pcc_force_dialplan
+  type: rw
+  desc: Force dialplan execution for 3PCC calls
+  example: Set to true to run dialplan on 3PCC
+---
+section: Conference Variables
+variables:
+- name: conference_name
+  type: rw
+  example: Conference room identifier
+- name: conference_member_id
+  type: ro
+  desc: Member ID in the conference
+  example: Unique member number
+- name: conference_moderator
+  type: rw
+  desc: Indicates if member is moderator
+  example: Set to true for moderator privileges
+- name: conference_flags
+  type: rw
+  desc: Conference member flags
+  example: Comma-separated flags like mute,deaf
+---
+section: Video Variables
+variables:
+- name: video_width
+  type: rw
+  example: Set to 1280 for HD width
+- name: video_height
+  type: rw
+  example: Set to 720 for HD height
+- name: video_fps
+  type: rw
+  desc: Video frames per second
+  example: Set to 30 for 30fps
+- name: video_media_flow
+  type: ro
+  desc: Video media flow status
+  example: sendrecv, sendonly, recvonly
+- name: audio_media_flow
+  type: ro
+  desc: Audio media flow status
+  example: sendrecv, sendonly, recvonly
+---
+section: Special Prefix Variables
+variables:
+- name: nolocal:*
+  type: rw
+  desc: Variable prefix for non-exported variables
+  example: nolocal:my_var won't be exported to other legs
+- name: export:*
+  type: rw
+  desc: Variable prefix to auto-export to B-leg
+  example: export:my_var will be copied to B-leg
+- name: global:*
+  type: rw
+  desc: Variable prefix for global scope
+  example: global:my_var is accessible globally
+---
+section: Originate Continue Variables
+variables:
+- name: continue_on_answer_timeout
+  type: rw
+  scope: out
+  desc: Continue on answer timeout instead of failing
+  example: Set to true to continue dialplan on timeout
+- name: uuid_bridge_continue_on_cancel
+  type: rw
+  desc: Continue if uuid_bridge is cancelled
+  example: Set to true to not fail on cancel
+---
+section: Miscellaneous Variables
+variables:
+- name: sound_prefix
+  type: rw
+  desc: Prefix path for sound files
+  example: Base directory for audio prompts
+- name: sound_prefix_enforced
+  type: rw
+  desc: Enforce sound_prefix for all playback
+  example: Set to true to require prefix
+- name: timezone
+  type: rw
+  desc: Timezone for the call
+  example: America/New_York
+- name: language
+  type: rw
+  desc: Language for prompts and say applications
+  example: en or es for language selection
+- name: sleep_eat_digits
+  type: rw
+  desc: Eat DTMF digits during sleep
+  example: Set to true to consume DTMF during pause
+- name: socket_host
+  type: rw
+  desc: Socket host for event socket control
+  example: Host for outbound event socket
+- name: socket_path
+  type: rw
+  desc: Socket path for event socket control
+  example: Unix socket path
+- name: socket_resume
+  type: rw
+  desc: Resume after event socket disconnect
+  example: Set to true to continue without socket
+- name: media_webrtc
+  type: rw
+  desc: Enable WebRTC media handling
+  example: Set to true for WebRTC compatibility

@@ -1,0 +1,924 @@
+title: FreeSWITCH mod_dptools Applications Reference
+description: Standard applications available in FreeSWITCH mod_dptools module
+---
+section: Call Control
+applications:
+- name: acknowledge_call
+  description: Signal early media acknowledgment
+  usage: '<action application="acknowledge_call" data=""/>'
+
+- name: answer
+  description: Begin billing
+  usage: '<action application="answer" data=""/>'
+
+- name: hangup
+  parameters:
+    cause: '[optional] Cause code (NORMAL_CLEARING, USER_BUSY, etc.)'
+  usage: '<action application="hangup" data="[<cause>]"/>'
+
+- name: ring_ready
+  description: Send 180 Ringing without answering
+  usage: '<action application="ring_ready" data=""/>'
+
+- name: pre_answer
+  description: Send early media (183) without full answer
+  usage: '<action application="pre_answer" data=""/>'
+
+- name: bridge
+  parameters:
+    channel_url: '[required] Destination (user/1001, sofia/external/number@domain)'
+  usage: '<action application="bridge" data="<channel_url>"/>'
+
+- name: transfer
+  description: Transfer to extension immediately
+  parameters:
+    exten: '[required] Destination extension'
+    dialplan: '[optional] Dialplan module (default: XML)'
+    context: '[optional] Context (default: current)'
+  usage: '<action application="transfer" data="<exten> [<dialplan> <context>]"/>'
+
+- name: att_xfer
+  description: Attended transfer with pre-connect conversation
+  parameters:
+    channel_url: '[required] Transfer destination'
+  usage: '<action application="att_xfer" data="<channel_url>"/>'
+
+- name: blind_transfer_ack
+  description: Enable/disable blind transfer acknowledgment
+  parameters:
+    enable: '[required] true or false'
+  usage: '<action application="blind_transfer_ack" data="[true|false]"/>'
+
+- name: early_hangup
+  description: Enable fast hangup detection
+  usage: '<action application="early_hangup" data=""/>'
+
+- name: intercept
+  description: Take over another call
+  parameters:
+    bleg: '[optional] Flag -bleg to intercept B-leg'
+    uuid: '[required] Channel UUID'
+  usage: '<action application="intercept" data="[-bleg] <uuid>"/>'
+
+- name: three_way
+  description: Create three-way call
+  parameters:
+    uuid: '[required] Channel UUID to add'
+  usage: '<action application="three_way" data="<uuid>"/>'
+
+- name: park
+  description: Park indefinitely
+  usage: '<action application="park" data=""/>'
+
+- name: unhold
+  usage: '<action application="unhold" data=""/>'
+
+- name: hold
+  parameters:
+    message: '[optional] Display message for held party'
+  usage: '<action application="hold" data="[<display message>]"/>'
+
+- name: soft_hold
+  description: Hold with DTMF unhold capability
+  parameters:
+    unhold_key: '[required] DTMF key to unhold'
+    moh_a: '[optional] A-leg music on hold'
+    moh_b: '[optional] B-leg music on hold'
+  usage: '<action application="soft_hold" data="<unhold key> [<moh_a>] [<moh_b>]"/>'
+
+---
+section: Media Playback
+applications:
+- name: playback
+  parameters:
+    path: '[required] Audio file path'
+  usage: '<action application="playback" data="<path>"/>'
+
+- name: endless_playback
+  description: Play file in continuous loop
+  parameters:
+    path: '[required] Audio file path'
+  usage: '<action application="endless_playback" data="<path>"/>'
+
+- name: loop_playback
+  description: Play file multiple times
+  parameters:
+    loops: '[required] Loop count (prefix with +)'
+    path: '[required] Audio file path'
+  usage: '<action application="loop_playback" data="[+loops] <path>"/>'
+
+- name: broadcast
+  description: Broadcast file to specific leg(s)
+  parameters:
+    path: '[required] Audio file path'
+    leg: '[required] aleg, bleg, or both'
+  usage: '<action application="broadcast" data="<path> <leg>"/>'
+
+- name: displace_session
+  description: Mix audio file into channel input
+  parameters:
+    path: '[required] Audio file path'
+    flags: '[optional] r=read, w=write, rw=both, m=mux'
+    time_limit_ms: '[optional] Time limit (prefix +)'
+  usage: '<action application="displace_session" data="<path> [<flags>] [+time_limit_ms]"/>'
+
+- name: stop_displace_session
+  description: Stop displacing audio
+  parameters:
+    path: '[required] Path of session to stop'
+  usage: '<action application="stop_displace_session" data="<path>"/>'
+
+- name: speak
+  description: Text-to-speech synthesis
+  parameters:
+    engine: '[required] TTS engine name'
+    voice: '[required] Voice name'
+    text: '[required] Text to speak'
+  usage: '<action application="speak" data="<engine>|<voice>|<text>"/>'
+
+- name: say
+  description: Say engine with language/type specifications
+  parameters:
+    module_name: '[required] Say module'
+    lang: '[optional] Language code'
+    say_type: '[required] Type (number, items, currency, etc.)'
+    say_method: '[required] pronounced, iterated, or counted'
+    say_gender: '[optional] masculine, feminine, or neuter'
+    text: '[required] Text to speak'
+  usage: '<action application="say" data="<module_name>[:<lang>] <say_type> <say_method> [<say_gender>] <text>"/>'
+
+- name: phrase
+  description: Play phrase macro with language-specific prompts
+  parameters:
+    macro_name: '[required] Phrase macro name'
+    data: '[required] Data to pass to macro'
+  usage: '<action application="phrase" data="<macro_name>,<data>"/>'
+
+- name: echo
+  description: Echo test
+  usage: '<action application="echo" data=""/>'
+
+- name: delay_echo
+  description: Echo with delay
+  parameters:
+    delay_ms: '[required] Delay in milliseconds'
+  usage: '<action application="delay_echo" data="<delay ms>"/>'
+
+- name: gentones
+  description: Generate TGML tones
+  parameters:
+    tgml_script: '[required] TGML tone specification'
+    loops: '[optional] Loop count'
+  usage: '<action application="gentones" data="<tgml_script>[|<loops>]"/>'
+
+---
+section: DTMF
+applications:
+- name: send_dtmf
+  description: Send DTMF tones immediately
+  parameters:
+    dtmf_data: '[required] Digits, w for wait, W for 1sec wait'
+  usage: '<action application="send_dtmf" data="<dtmf_data>"/>'
+
+- name: queue_dtmf
+  description: Queue DTMF for later sending
+  parameters:
+    dtmf_data: '[required] DTMF digits to queue'
+  usage: '<action application="queue_dtmf" data="<dtmf_data>"/>'
+
+- name: read
+  description: Read DTMF digits from caller
+  parameters:
+    min: '[required] Minimum digits'
+    max: '[required] Maximum digits'
+    file: '[required] Prompt audio file'
+    var_name: '[required] Variable to store result'
+    timeout: '[required] Total timeout (ms)'
+    terminators: '[required] Terminator keys'
+    digit_timeout: '[optional] Inter-digit timeout'
+  usage: '<action application="read" data="<min> <max> <file> <var_name> <timeout> <terminators> <digit_timeout>"/>'
+
+- name: play_and_get_digits
+  description: Play prompt and collect validated DTMF
+  parameters:
+    min: '[required] Minimum digits'
+    max: '[required] Maximum digits'
+    tries: '[required] Retry attempts'
+    timeout: '[required] Timeout (ms)'
+    terminators: '[required] Terminator keys'
+    file: '[required] Prompt file'
+    invalid_file: '[required] Invalid input file'
+    var_name: '[required] Result variable'
+    regexp: '[required] Validation regex'
+    digit_timeout: '[optional] Inter-digit timeout'
+    failure_ext: '[optional] Transfer on failure'
+    failure_dp: '[optional] Dialplan for failure'
+    failure_context: '[optional] Context for failure'
+  usage: '<action application="play_and_get_digits" data="<min> <max> <tries> <timeout> <terminators> <file> <invalid_file> <var_name> <regexp> [<digit_timeout>] [''<failure_ext> [failure_dp [failure_context]]]"/>'
+
+- name: block_dtmf
+  description: Block DTMF processing
+  usage: '<action application="block_dtmf" data=""/>'
+
+- name: unblock_dtmf
+  description: Resume DTMF processing
+  usage: '<action application="unblock_dtmf" data=""/>'
+
+- name: flush_dtmf
+  usage: '<action application="flush_dtmf" data=""/>'
+
+- name: bind_digit_action
+  description: Bind DTMF sequences to actions
+  parameters:
+    realm: '[required] Binding realm name'
+    digits_or_regex: '[required] Digit sequence or ~regex'
+    action_string: '[required] Action to execute'
+    value: '[optional] Value to pass'
+    dtmf_leg: '[optional] peer or self'
+    event_leg: '[optional] peer or self'
+  usage: '<action application="bind_digit_action" data="<realm>,<digits|~regex>,<string>[,<value>][,<dtmf leg>][,<event leg>]"/>'
+
+- name: clear_digit_action
+  description: Clear digit bindings
+  parameters:
+    realm_or_all: '[required] Realm name or all'
+    target: '[optional] Target leg'
+  usage: '<action application="clear_digit_action" data="<realm>|all[,target]"/>'
+
+- name: digit_action_set_realm
+  description: Change binding realm
+  parameters:
+    realm: '[required] New realm name'
+    target: '[optional] Target leg'
+  usage: '<action application="digit_action_set_realm" data="<realm>[,<target>]"/>'
+
+- name: bind_meta_app
+  description: Bind DTMF key to application
+  parameters:
+    key: '[required] DTMF digit (0-9, *, #)'
+    legs: '[optional] a, b, or ab'
+    flags: '[optional] a, b, o, s, i, 1'
+    app: '[required] Application to execute'
+  usage: '<action application="bind_meta_app" data="<key> [a|b|ab] [a|b|o|s|i|1] <app>"/>'
+
+- name: unbind_meta_app
+  description: Remove DTMF binding
+  parameters:
+    key: '[optional] Specific key or all'
+  usage: '<action application="unbind_meta_app" data="[<key>]"/>'
+
+- name: deduplicate_dtmf
+  description: Prevent inband/RFC2833 DTMF duplication
+  parameters:
+    only_rtp: '[optional] Only RTP deduplication'
+  usage: '<action application="deduplicate_dtmf" data="[only_rtp]"/>'
+
+---
+section: Recording
+applications:
+- name: record
+  description: Record channel audio to file
+  parameters:
+    path: '[required] Save path'
+    time_limit_secs: '[optional] Max duration'
+    silence_thresh: '[optional] Silence threshold'
+    silence_hits: '[optional] Silence hit count'
+  usage: '<action application="record" data="<path> [<time_limit_secs>] [<silence_thresh>] [<silence_hits>]"/>'
+
+- name: record_session
+  description: Background session recording
+  parameters:
+    path: '[required] Save path'
+    timeout: '[optional] Timeout (prefix +)'
+  usage: '<action application="record_session" data="<path> [+<timeout>]"/>'
+
+- name: stop_record_session
+  description: Stop session recording
+  parameters:
+    path: '[required] Recording path'
+  usage: '<action application="stop_record_session" data="<path>"/>'
+
+- name: record_session_pause
+  description: Pause active recording
+  parameters:
+    path: '[required] Recording path'
+  usage: '<action application="record_session_pause" data="<path>"/>'
+
+- name: record_session_resume
+  description: Resume paused recording
+  parameters:
+    path: '[required] Recording path'
+  usage: '<action application="record_session_resume" data="<path>"/>'
+
+- name: record_session_mask
+  description: Mute audio in recording
+  parameters:
+    path: '[required] Recording path'
+  usage: '<action application="record_session_mask" data="<path>"/>'
+
+- name: record_session_unmask
+  description: Unmute audio in recording
+  parameters:
+    path: '[required] Recording path'
+  usage: '<action application="record_session_unmask" data="<path>"/>'
+
+---
+section: Variables
+applications:
+- name: set
+  parameters:
+    varname: '[required] Variable name'
+    value: '[required] Variable value'
+  usage: '<action application="set" data="<varname>=<value>"/>'
+
+- name: set_global
+  parameters:
+    varname: '[required] Variable name'
+    value: '[required] Variable value'
+  usage: '<action application="set_global" data="<varname>=<value>"/>'
+
+- name: unset
+  parameters:
+    varname: '[required] Variable name'
+  usage: '<action application="unset" data="<varname>"/>'
+
+- name: multiset
+  description: Set multiple variables at once
+  parameters:
+    delimiter: '[optional] Custom delimiter (default: space)'
+    assignments: '[required] varname=value pairs'
+  usage: '<action application="multiset" data="[^^<delim>]<varname>=<value> <var2>=<val2>"/>'
+
+- name: multiunset
+  description: Unset multiple variables
+  parameters:
+    delimiter: '[optional] Custom delimiter (default: space)'
+    variables: '[required] Variable names'
+  usage: '<action application="multiunset" data="[^^<delim>]<varname> <var2> <var3>"/>'
+
+- name: export
+  description: Set and export variable to B-leg
+  parameters:
+    varname: '[required] Variable name'
+    value: '[required] Variable value'
+  usage: '<action application="export" data="<varname>=<value>"/>'
+
+- name: bridge_export
+  description: Export variable across bridge
+  parameters:
+    varname: '[required] Variable name'
+    value: '[required] Variable value'
+  usage: '<action application="bridge_export" data="<varname>=<value>"/>'
+
+- name: transfer_vars
+  description: Transfer variables to other channel
+  parameters:
+    variable_or_prefix: '[required] Variable or ~prefix'
+  usage: '<action application="transfer_vars" data="<~variable_prefix|variable>"/>'
+
+- name: push
+  description: Push value to variable stack
+  parameters:
+    varname: '[required] Variable name'
+    value: '[required] Value'
+  usage: '<action application="push" data="<varname>=<value>"/>'
+
+- name: unshift
+  description: Unshift value from variable stack
+  parameters:
+    varname: '[required] Variable name'
+    value: '[required] Value'
+  usage: '<action application="unshift" data="<varname>=<value>"/>'
+
+- name: eval
+  description: Evaluate expression (variable expansion)
+  usage: '<action application="eval" data=""/>'
+
+---
+section: Detection
+applications:
+- name: detect_speech
+  description: Enable speech recognition
+  parameters:
+    mod_name: '[required] Speech module'
+    gram_name: '[required] Grammar name'
+    gram_path: '[required] Grammar file path'
+    addr: '[optional] Server address'
+  usage: '<action application="detect_speech" data="<mod_name> <gram_name> <gram_path> [<addr>]"/>'
+
+- name: play_and_detect_speech
+  description: Play audio and recognize speech
+  parameters:
+    file: '[required] Audio file'
+    engine: '[required] Recognition engine'
+    params: '[optional] Engine parameters'
+    grammar: '[required] Grammar spec'
+  usage: '<action application="play_and_detect_speech" data="<file> detect:<engine> {param1=val1,param2=val2}<grammar>"/>'
+
+- name: detect_audio
+  description: Detect audio presence
+  parameters:
+    threshold: '[required] Energy threshold'
+    audio_hits: '[required] Consecutive frames'
+    timeout_ms: '[required] Max wait (ms)'
+    file: '[optional] Prompt file'
+  usage: '<action application="detect_audio" data="<threshold> <audio_hits> <timeout_ms> [<file>]"/>'
+
+- name: detect_silence
+  description: Detect silence
+  parameters:
+    threshold: '[required] Energy threshold'
+    silence_hits: '[required] Consecutive frames'
+    timeout_ms: '[required] Max wait (ms)'
+    file: '[optional] Prompt file'
+  usage: '<action application="detect_silence" data="<threshold> <silence_hits> <timeout_ms> [<file>]"/>'
+
+- name: wait_for_silence
+  description: Wait for silence before proceeding
+  parameters:
+    silence_thresh: '[required] Silence threshold'
+    silence_hits: '[required] Frames required'
+    listen_hits: '[required] Audio frames before listen'
+    timeout_ms: '[required] Max wait (ms)'
+    file: '[optional] Prompt file'
+  usage: '<action application="wait_for_silence" data="<silence_thresh> <silence_hits> <listen_hits> <timeout_ms> [<file>]"/>'
+
+- name: tone_detect
+  description: Detect custom tones
+  parameters:
+    key: '[required] Detection identifier'
+    tone_spec: '[required] Tone specification'
+    timeout: '[optional] Timeout (ms)'
+  usage: '<action application="tone_detect" data="<key> <tone_spec> [timeout]"/>'
+
+- name: stop_tone_detect
+  description: Stop tone detection
+  usage: '<action application="stop_tone_detect" data=""/>'
+
+- name: fax_detect
+  description: Detect fax CNG tones
+  usage: '<action application="fax_detect" data=""/>'
+
+---
+section: Eavesdrop
+applications:
+- name: eavesdrop
+  description: Listen to call (all or specific UUID)
+  parameters:
+    target: '[required] all or UUID'
+  usage: '<action application="eavesdrop" data="[all | <uuid>]"/>'
+
+- name: native_eavesdrop
+  description: Native eavesdrop (efficient)
+  parameters:
+    uuid: '[required] Channel UUID'
+    direction: '[optional] read or write'
+  usage: '<action application="native_eavesdrop" data="<uuid> [read|write]"/>'
+
+---
+section: Media Control
+applications:
+- name: start_dtmf
+  description: Enable inband DTMF detection
+  usage: '<action application="start_dtmf" data=""/>'
+
+- name: stop_dtmf
+  description: Disable inband DTMF detection
+  usage: '<action application="stop_dtmf" data=""/>'
+
+- name: start_dtmf_generate
+  description: Enable inband DTMF generation
+  usage: '<action application="start_dtmf_generate" data=""/>'
+
+- name: stop_dtmf_generate
+  description: Disable inband DTMF generation
+  parameters:
+    write: '[optional] Write stream only'
+  usage: '<action application="stop_dtmf_generate" data="[write]"/>'
+
+- name: set_audio_level
+  description: Adjust audio volume
+  parameters:
+    stream: '[required] read or write'
+    vol: '[required] dB adjustment (-4 to 4)'
+  usage: '<action application="set_audio_level" data="[read|write] <vol>"/>'
+
+- name: set_mute
+  description: Mute audio stream
+  parameters:
+    stream: '[required] read or write'
+    mute_value: '[required] true, cn level (0-127), or false'
+  usage: '<action application="set_mute" data="[read|write] [[true|cn level]|false]"/>'
+
+- name: debug_media
+  description: Enable media debugging
+  parameters:
+    stream_type: '[required] read, write, both, vread, vwrite, vboth, or all'
+    state: '[required] on or off'
+  usage: '<action application="debug_media" data="<read|write|both|vread|vwrite|vboth|all> <on|off>"/>'
+
+- name: novideo
+  description: Strip video from call
+  usage: '<action application="novideo" data=""/>'
+
+- name: media_reset
+  description: Reset bypass/proxy media flags
+  usage: '<action application="media_reset" data=""/>'
+
+- name: jitterbuffer
+  description: Configure jitterbuffer
+  parameters:
+    jitterbuffer_data: '[required] Config (e.g., 60ms:120ms)'
+  usage: '<action application="jitterbuffer" data="<jitterbuffer_data>"/>'
+
+- name: cng_plc
+  description: Enable packet loss concealment
+  usage: '<action application="cng_plc" data=""/>'
+
+---
+section: Scheduling
+applications:
+- name: sched_hangup
+  description: Schedule hangup in future
+  parameters:
+    time: '[required] Seconds (prefix + for relative)'
+    cause: '[optional] Hangup cause'
+  usage: '<action application="sched_hangup" data="[+]<time> [<cause>]"/>'
+
+- name: sched_transfer
+  description: Schedule transfer in future
+  parameters:
+    time: '[required] Seconds (prefix + for relative)'
+    extension: '[required] Destination'
+    dialplan: '[required] Dialplan module'
+    context: '[required] Context'
+  usage: '<action application="sched_transfer" data="[+]<time> <extension> <dialplan> <context>"/>'
+
+- name: sched_broadcast
+  description: Schedule broadcast in future
+  parameters:
+    time: '[required] Seconds (prefix + for relative)'
+    path: '[required] Audio file'
+    leg: '[optional] aleg, bleg, or both'
+  usage: '<action application="sched_broadcast" data="[+]<time> <path> [aleg|bleg|both]"/>'
+
+- name: sched_cancel
+  description: Cancel scheduled tasks
+  parameters:
+    group: '[optional] Task group ID'
+  usage: '<action application="sched_cancel" data="[group]"/>'
+
+---
+section: Heartbeat
+applications:
+- name: enable_heartbeat
+  description: Enable media heartbeat
+  parameters:
+    interval: '[optional] 0 to disable, or seconds'
+  usage: '<action application="enable_heartbeat" data="[0|<seconds>]"/>'
+
+- name: sched_heartbeat
+  description: Scheduled heartbeat checks
+  parameters:
+    interval: '[optional] 0 to disable, or seconds'
+  usage: '<action application="sched_heartbeat" data="[0|<seconds>]"/>'
+
+- name: enable_keepalive
+  description: Enable keepalive messages
+  parameters:
+    interval: '[optional] 0 to disable, or seconds'
+  usage: '<action application="enable_keepalive" data="[0|<seconds>]"/>'
+
+---
+section: Resource Limits
+applications:
+- name: limit
+  description: Limit resource access
+  parameters:
+    backend: '[required] db, hash, etc.'
+    realm: '[required] Resource realm'
+    id: '[required] Resource identifier'
+    max: '[required] Max concurrent usage'
+    interval: '[optional] Rate limit window'
+    number: '[optional] Transfer on limit'
+    dialplan: '[optional] Transfer dialplan'
+    context: '[optional] Transfer context'
+  usage: '<action application="limit" data="<backend> <realm> <id> [<max>[/interval]] [number [dialplan [context]]]"/>'
+
+- name: limit_execute
+  description: Execute app only if limit not exceeded
+  parameters:
+    backend: '[required] db, hash, etc.'
+    realm: '[required] Resource realm'
+    id: '[required] Resource identifier'
+    max: '[required] Max concurrent usage'
+    interval: '[optional] Rate limit window'
+    application: '[required] App to execute'
+    app_args: '[optional] App arguments'
+  usage: '<action application="limit_execute" data="<backend> <realm> <id> <max>[/interval] <application> [arguments]"/>'
+
+- name: mutex
+  description: Mutual exclusion lock
+  parameters:
+    keyname: '[required] Mutex identifier'
+    state: '[optional] on or off'
+  usage: '<action application="mutex" data="<keyname>[ on|off]"/>'
+
+---
+section: Logging
+applications:
+- name: log
+  description: Log message to FreeSWITCH logger
+  parameters:
+    log_level: '[required] DEBUG, INFO, NOTICE, WARNING, ERROR, CRIT, ALERT'
+    log_string: '[required] Message (variables expanded)'
+  usage: '<action application="log" data="<log_level> <log_string>"/>'
+  note: 'The first space-separated word is always the log level. Without a valid level, the message may not appear or may log at wrong level. Warn users if they write data="some message" without a level, or if they use patterns like "INFO - text" thinking the dash is decorative (INFO is the level, "- text" is the message).'
+
+- name: session_loglevel
+  description: Set session log level
+  parameters:
+    level: '[required] DEBUG, INFO, NOTICE, WARNING, ERROR, CRIT, ALERT'
+  usage: '<action application="session_loglevel" data="<level>"/>'
+
+---
+section: System
+applications:
+- name: system
+  description: Execute system command (blocking)
+  parameters:
+    command: '[required] Command to execute'
+  usage: '<action application="system" data="<command>"/>'
+
+- name: bgsystem
+  description: Execute system command (background)
+  parameters:
+    command: '[required] Command to execute'
+  usage: '<action application="bgsystem" data="<command>"/>'
+
+- name: sleep
+  parameters:
+    pausemilliseconds: '[required] Pause duration (ms)'
+  usage: '<action application="sleep" data="<pausemilliseconds>"/>'
+
+- name: break
+  description: Interrupt media playback
+  usage: '<action application="break" data=""/>'
+
+- name: stop
+  description: Stop dialplan execution (no-op)
+  usage: '<action application="stop" data=""/>'
+
+---
+section: Filesystem
+applications:
+- name: mkdir
+  parameters:
+    path: '[required] Directory path'
+  usage: '<action application="mkdir" data="<path>"/>'
+
+- name: rename
+  parameters:
+    from_path: '[required] Source path'
+    to_path: '[required] Destination path'
+  usage: '<action application="rename" data="<from_path> <to_path>"/>'
+
+---
+section: Info
+applications:
+- name: info
+  usage: '<action application="info" data=""/>'
+
+- name: send_display
+  description: Send display update to phone
+  parameters:
+    text: '[required] Display text'
+  usage: '<action application="send_display" data="<text>"/>'
+
+- name: send_info
+  description: Send SIP INFO message
+  parameters:
+    info: '[required] INFO content'
+  usage: '<action application="send_info" data="<info>"/>'
+
+---
+section: Video
+applications:
+- name: video_refresh
+  description: Request video keyframe
+  parameters:
+    mode: '[optional] manual or auto'
+  usage: '<action application="video_refresh" data="[manual|auto]"/>'
+
+- name: video_decode
+  description: Control video decoding
+  parameters:
+    mode: '[optional] on, wait, or off'
+  usage: '<action application="video_decode" data="[[on|wait]|off]"/>'
+
+- name: video_write_overlay
+  description: Overlay image on video stream
+  parameters:
+    path: '[required] Image file path'
+    pos: '[optional] Position'
+    alpha: '[optional] Transparency'
+  usage: '<action application="video_write_overlay" data="<path> [<pos>] [<alpha>]"/>'
+
+- name: stop_video_write_overlay
+  description: Remove video overlay
+  parameters:
+    path: '[required] Overlay identifier'
+  usage: '<action application="stop_video_write_overlay" data="<path>"/>'
+
+- name: wait_for_video_ready
+  description: Wait for video stream ready
+  parameters:
+    ms: '[optional] Timeout (1-10000 ms)'
+  usage: '<action application="wait_for_video_ready" data="[<ms, 1..10000>]"/>'
+
+---
+section: Dialplan
+applications:
+- name: execute_extension
+  description: Execute dialplan extension
+  parameters:
+    extension: '[required] Extension'
+    dialplan: '[required] Dialplan (XML)'
+    context: '[required] Context'
+  usage: '<action application="execute_extension" data="<extension> <dialplan> <context>"/>'
+
+- name: ivr
+  description: Run IVR menu
+  parameters:
+    menu_name: '[required] IVR menu name'
+  usage: '<action application="ivr" data="<menu_name>"/>'
+
+---
+section: Misc
+applications:
+- name: capture
+  description: Capture data with regex
+  parameters:
+    varname: '[required] Result variable'
+    data: '[required] Data to match'
+    regex: '[required] Regex pattern'
+  usage: '<action application="capture" data="<varname>|<data>|<regex>"/>'
+
+- name: capture_text
+  description: Capture text messages
+  usage: '<action application="capture_text" data=""/>'
+
+- name: check_acl
+  description: Check IP against ACL
+  parameters:
+    ip: '[required] IP address'
+    acl_or_cidr: '[required] ACL name or CIDR'
+    hangup_cause: '[optional] Cause on fail'
+  usage: '<action application="check_acl" data="<ip> <acl|cidr> [<hangup_cause>]"/>'
+
+- name: clear_speech_cache
+  description: Clear TTS/ASR cache
+  usage: '<action application="clear_speech_cache" data=""/>'
+
+- name: deflect
+  description: Deflect call at SIP level
+  parameters:
+    destination: '[required] Deflection target'
+  usage: '<action application="deflect" data="<deflect_data>"/>'
+
+- name: respond
+  description: Send SIP response
+  parameters:
+    response: '[required] Code and reason'
+  usage: '<action application="respond" data="<respond_data>"/>'
+
+- name: redirect
+  description: Redirect call at SIP level
+  parameters:
+    destination: '[required] Redirect target(s)'
+  usage: '<action application="redirect" data="<redirect_data>"/>'
+
+- name: strftime
+  description: Format time
+  parameters:
+    epoch: '[optional] Unix timestamp'
+    format_string: '[required] strftime format'
+  usage: '<action application="strftime" data="[<epoch>|]<format string>"/>'
+
+- name: page
+  description: Page multiple channels simultaneously
+  parameters:
+    variables: '[optional] Variable assignments'
+    channels: '[required] Channels (separated by :_:)'
+  usage: '<action application="page" data="<var1=val1,var2=val2><chan1>[:_:<chanN>]"/>'
+
+- name: sound_test
+  description: Analyze audio quality
+  usage: '<action application="sound_test" data=""/>'
+
+- name: vad_test
+  description: Test voice activity detection
+  parameters:
+    mode: '[optional] Aggressiveness (-1 to 3)'
+  usage: '<action application="vad_test" data="[mode]"/>'
+
+- name: event
+  description: Fire custom event
+  parameters:
+    headers: '[required] Event headers'
+  usage: '<action application="event" data="Event-Name=CUSTOM,Event-Subclass=myapp::event[,Header=value]..."/>'
+
+- name: set_name
+  description: Set channel name
+  parameters:
+    name: '[required] Channel name'
+  usage: '<action application="set_name" data="<name>"/>'
+
+- name: set_user
+  description: Load user config
+  parameters:
+    user_domain: '[required] user@domain'
+    prefix: '[optional] Variable prefix'
+  usage: '<action application="set_user" data="<user>@<domain> [prefix]"/>'
+
+- name: set_profile_var
+  description: Set caller profile variable
+  parameters:
+    varname: '[required] Variable name'
+    value: '[required] Variable value'
+  usage: '<action application="set_profile_var" data="<varname>=<value>"/>'
+
+- name: reuse_caller_profile
+  description: Reuse caller profile
+  usage: '<action application="reuse_caller_profile" data=""/>'
+
+- name: wait_for_answer
+  description: Wait for call answer
+  usage: '<action application="wait_for_answer" data=""/>'
+
+- name: remove_bugs
+  description: Remove media bugs
+  parameters:
+    function: '[optional] Specific bug function'
+  usage: '<action application="remove_bugs" data="[<function>]"/>'
+
+- name: set_media_stats
+  description: Set media statistics
+  usage: '<action application="set_media_stats" data=""/>'
+
+- name: set_zombie_exec
+  description: Enable post-hangup execution
+  usage: '<action application="set_zombie_exec" data=""/>'
+
+- name: recovery_refresh
+  description: Send recovery refresh
+  usage: '<action application="recovery_refresh" data=""/>'
+
+- name: verbose_events
+  description: Verbose event logging
+  usage: '<action application="verbose_events" data=""/>'
+
+- name: preprocess
+  description: Preprocess channel
+  usage: '<action application="preprocess" data=""/>'
+
+- name: refer_3pcc
+  description: Send REFER with Replaces (3PCC)
+  parameters:
+    uuid: '[required] Channel UUID'
+    use_upstream_header: '[optional] Use X-FS-Refer-Replaces'
+  usage: '<action application="refer_3pcc" data="<uuid-to-refer> [use-upstream-header]"/>'
+
+- name: refer_export_3pcc
+  description: Export REFER variables (3PCC)
+  parameters:
+    uuid: '[required] Channel UUID'
+  usage: '<action application="refer_export_3pcc" data="<uuid-to-export-refer-info>"/>'
+
+- name: refer_to_uri_3pcc
+  description: Send REFER with URI (3PCC)
+  parameters:
+    uri: '[required] Refer-To URI'
+  usage: '<action application="refer_to_uri_3pcc" data="<refer-to-uri>"/>'
+
+- name: subscribe_conference_3pcc
+  description: Subscribe to 3PCC conference
+  usage: '<action application="subscribe_conference_3pcc" data=""/>'
+
+- name: presence
+  description: Send presence notification
+  parameters:
+    rpid: '[required] RPID value'
+    status: '[required] Status message'
+    id: '[optional] Presence ID'
+  usage: '<action application="presence" data="<rpid> <status> [<id>]"/>'
+
+- name: privacy
+  description: Set privacy options
+  parameters:
+    option: '[required] off, on, name, full, or number'
+  usage: '<action application="privacy" data="off|on|name|full|number"/>'
+
+- name: park_state
+  description: Control park state
+  usage: '<action application="park_state" data=""/>'

@@ -1,0 +1,407 @@
+# FreeSWITCH Channel Variables - Compact List
+# Format: variable_name or variable_name: brief_description if name is unclear
+
+core_channel_variables:
+  uuid: unique call session identifier
+  channel_name: full channel endpoint name
+  call_uuid: shared UUID across bridged A-leg and B-leg
+  session_uuid: RFC 7989 session ID for local session
+  remote_session_uuid: RFC 7989 session ID from remote party
+  channel_state: current state (NEW, INIT, ROUTING, EXECUTE, etc.)
+  direction: inbound or outbound
+  username: authenticated user
+  domain_name: multi-tenant routing
+  network_addr: remote endpoint IP address
+
+caller_id_variables:
+  caller_id_name:
+  caller_id_number: ANI (Automatic Number Identification)
+  callee_id_name:
+  callee_id_number:
+  effective_caller_id_name: after transformations
+  effective_caller_id_number: after transformations
+  effective_callee_id_name: after transformations
+  effective_callee_id_number: after transformations
+  effective_ani: billing identification separate from caller ID
+  effective_aniii: SS7/ISDN digits
+  origination_caller_id_name: for outbound calls
+  origination_caller_id_number: for outbound calls
+  origination_callee_id_name: for outbound calls
+  origination_callee_id_number: for outbound calls
+
+dialplan_variables:
+  destination_number:
+  context: dialplan section
+  dialplan: dialplan module (XML, enum, etc.)
+  dialed_user: user portion of dialed address
+  dialed_domain: domain portion of dialed address
+
+call_control_variables:
+  hangup_cause: NORMAL_CLEARING, USER_BUSY, NO_ANSWER, etc.
+  hangup_after_bridge:
+  park_after_bridge:
+  park_after_early_bridge:
+  transfer_after_bridge: extension XML context format
+  transfer_after_early_bridge:
+  continue_on_fail: true or specific cause codes
+  call_timeout: seconds
+  answer_timeout: milliseconds
+  progress_timeout: wait for progress/ring
+  bridge_answer_timeout: wait for answer during bridge
+  originate_timeout: total timeout for originate
+  leg_timeout: per-leg timeout in parallel originate
+  leg_delay_start: delay before starting leg in parallel originate (seconds)
+
+bridge_variables:
+  bridge_to:
+  last_bridge_to: useful for redialing/error handling
+  bridge_uuid: other leg UUID
+  bridge_channel: full channel name of bridged party
+  bridge_hangup_cause: hangup cause from B-leg
+  signal_bridge_to: signaling-only bridge
+  signal_bond: create signaling relationship UUID
+  originate_signal_bond: establish during originate
+  uuid_bridge: internal UUID bridge flag
+  bridge_export_vars: comma-separated list
+  export_vars: comma-separated list
+  bridge_pre_execute_app: execute before bridge
+  bridge_pre_execute_data:
+  bridge_pre_execute_aleg_app:
+  bridge_pre_execute_aleg_data:
+  bridge_pre_execute_bleg_app:
+  bridge_pre_execute_bleg_data:
+  exec_after_bridge_app:
+  exec_after_bridge_arg:
+  bridge_filter_dtmf: prevent DTMF crossing bridge
+  bridge_generate_comfort_noise:
+  bridge_terminate_key: DTMF key to end bridge
+
+execute_on_hook_variables:
+  execute_on_answer: app::arg format, comma-separated
+  execute_on_pre_answer: early media (183/180)
+  execute_on_media:
+  execute_on_ring:
+  execute_on_originate:
+  execute_on_post_originate:
+  execute_on_pre_originate:
+  execute_on_pre_bridge:
+  execute_on_post_bridge:
+  execute_on_tone_detect:
+
+api_on_hook_variables:
+  api_on_answer:
+  api_on_pre_answer:
+  api_on_media:
+  api_on_ring:
+  api_on_originate:
+  api_on_post_originate:
+  api_on_pre_originate:
+  api_before_bridge:
+  api_after_bridge:
+  api_hangup_hook:
+  api_reporting_hook: CDR/reporting
+
+media_control_variables:
+  bypass_media: signaling only
+  bypass_media_after_bridge:
+  proxy_media: proxy RTP without transcoding
+  inbound_codec_prefs: comma-separated (PCMU,PCMA,G729)
+  outbound_codec_prefs: comma-separated
+  codec_string: internal representation
+  absolute_codec_string: override all negotiation
+  ep_codec_string: endpoint-specific
+  inherit_codec:
+  read_codec: current codec for receiving
+  write_codec: current codec for sending
+  video_possible:
+  text_possible:
+
+rtp_media_variables:
+  local_media_ip: audio RTP
+  local_media_port: audio RTP
+  advertised_media_ip: SDP override for NAT
+  remote_media_ip: audio RTP
+  remote_media_port: audio RTP
+  local_video_ip:
+  local_video_port:
+  remote_video_ip:
+  remote_video_port:
+  local_text_ip: text/RTT
+  local_text_port: text/RTT
+  rtp_secure_media: enable SRTP
+  rtp_secure_media_inbound: require SRTP inbound
+  rtp_secure_media_outbound: require SRTP outbound
+  rtp_secure_media_negotiated:
+  rtp_has_crypto: audio crypto keys present
+  rtp_has_video_crypto:
+  rtp_secure_audio_confirmed:
+  rtp_secure_video_confirmed:
+  rtp_autoflush_during_bridge: flush jitter buffer
+  rtp_jitter_buffer_during_bridge:
+  rtp_jitter_buffer_plc: packet loss concealment
+  jitterbuffer_msec: milliseconds
+  rtp_timer_name: soft or timerfd
+  rtp_use_timer_name: actual active timer
+  rtp_timeout_sec: hangup after no RTP received
+  rtp_hold_timeout_sec: timeout while on hold
+  rtp_use_codec_string:
+  rtp_use_codec_name:
+  rtp_use_codec_rate:
+  rtp_use_codec_ptime:
+  rtp_use_codec_channels: 1=mono, 2=stereo
+  rtp_use_pt: payload type
+  rtp_use_ssrc:
+  rtp_enable_vad_in: voice activity detection
+  rtp_enable_vad_out: voice activity detection
+  rtp_disable_vad_in:
+  rtp_disable_vad_out:
+  suppress_cng:
+  rtp_local_sdp_str:
+  switch_r_sdp: remote SDP
+  switch_l_sdp: local SDP
+  switch_m_sdp: media SDP (merged/bridged)
+  disable_rtp_auto_adjust: prevent IP changes
+  rtp_rewrite_timestamps:
+  rtp_video_max_bandwidth_in: bits/sec
+  rtp_video_max_bandwidth_out: bits/sec
+  media_timeout: alias for rtp_timeout_sec
+
+sip_variables:
+  sip_profile_name: internal, external, etc.
+  sip_call_id: dialog identifier
+  sip_from_user: From header username
+  sip_from_host: From header domain
+  sip_from_uri:
+  sip_from_display:
+  sip_from_tag: dialog identification
+  sip_to_user: To header username
+  sip_to_host: To header domain
+  sip_to_uri:
+  sip_to_display:
+  sip_to_tag: dialog identification
+  sip_contact_uri:
+  sip_contact_user:
+  sip_contact_params:
+  sip_req_uri: from INVITE
+  sip_req_user: from INVITE
+  sip_via_host:
+  sip_via_port:
+  sip_via_protocol: UDP, TCP, TLS
+  sip_via_rport: NAT detection
+  sip_network_ip: SIP signaling
+  sip_network_port: SIP signaling
+  sip_received_ip: actual source (NAT detection)
+  sip_received_port: actual source (NAT detection)
+  sip_user_agent: client software
+  sip_authorized: successful auth
+  sip_acl_authed_by: matching ACL
+  sip_acl_token: auth token
+  sip_nat_detected:
+  sip_auto_answer:
+  sip_auto_answer_detected:
+  sip_h_star: read headers (sip_h_X-Custom-Header)
+  sip_ph_star: set headers on replies
+  sip_invite_call_id: persists through transfers
+  sip_invite_to_uri:
+  sip_invite_from_uri:
+  sip_invite_domain:
+  sip_invite_req_uri:
+  sip_invite_route_uri:
+  sip_refer_to: transfer target
+  sip_referred_by: who initiated transfer
+  sip_redirect_dialstring: from 3xx Contact
+  sip_redirect_count:
+  sip_redirect_context: dialplan context
+  sip_redirect_dialplan: dialplan module
+  sip_hangup_disposition: send_bye, recv_bye, send_cancel, etc.
+  sip_hangup_phrase: reason text
+  sip_term_status: response code
+  sip_term_cause: Q.850 code
+  sip_local_network_addr:
+  sip_recover_via: call recovery
+  sip_recover_contact: call recovery
+  sip_sticky_contact: maintain across transactions
+  sip_cid_type: rpid, pid, none
+  sip_copy_custom_headers: enable X- header copying
+  sip_ignore_remote_cid:
+  sip_wait_for_aleg_ack: call control
+  sip_enable_soa:
+  sip_disable_recording:
+
+sofia_specific_variables:
+  sofia_profile_name:
+  sofia_profile_domain_name:
+  sofia_profile_url:
+  sofia_hold_inactive: RFC-compliant instead of sendonly/recvonly
+  sofia_record_file:
+
+recording_variables:
+  RECORD_TITLE: metadata
+  RECORD_ARTIST: metadata
+  RECORD_COMMENT: metadata
+  RECORD_COPYRIGHT: metadata
+  RECORD_SOFTWARE: metadata
+  RECORD_DATE: metadata
+  RECORD_STEREO: separate channels
+  RECORD_MIN_SEC: minimum length seconds
+  RECORD_ANSWER_REQ:
+  RECORD_HANGUP_ON_ERROR:
+  RECORD_WRITE_ONLY: outbound leg only
+  record_post_process_exec_app:
+  record_post_process_exec_api:
+
+cdr_variables:
+  process_cdr:
+  force_process_cdr:
+  skip_cdr_causes: comma-separated
+  copy_xml_cdr: file path
+  copy_json_cdr: file path
+  accountcode: billing
+
+application_state_variables:
+  current_application: executing app name
+  current_application_data: args
+  current_application_response: return value
+  last_app: previous app
+  last_arg: previous args
+
+timing_duration_variables:
+  start_epoch: Unix seconds
+  start_stamp: formatted string
+  start_uepoch: Unix microseconds
+  answer_epoch: Unix seconds
+  answer_stamp: formatted string
+  answer_uepoch: Unix microseconds
+  bridge_epoch: Unix seconds
+  bridge_stamp: formatted string
+  bridge_uepoch: Unix microseconds
+  end_epoch: Unix seconds
+  end_stamp: formatted string
+  end_uepoch: Unix microseconds
+  duration: start to end
+  billsec: answer to end (billable)
+  progresssec:
+  answersec:
+  waitsec:
+  progress_mediasec: early media
+  flow_billsec:
+  mduration: milliseconds
+  billmsec:
+  progressmsec:
+  answermsec:
+  waitmsec:
+  progress_mediamsec:
+  flow_billmsec:
+  uduration: microseconds
+  billusec:
+  progressusec:
+  answerusec:
+  waitusec:
+  progress_mediausec:
+  flow_billusec:
+
+transfer_variables:
+  transfer_history: transfer chain
+  transfer_source: who initiated
+  transfer_disposition: success, failure
+  transfer_fallback_extension:
+  transfer_ringback: audio during transfer
+  attended_transfer_no_copy: don't copy vars
+  att_xfer_result: success, timeout, cancel
+  att_xfer_destination_number:
+  att_xfer_callee_id_name: display name
+  att_xfer_callee_id_number:
+  att_xfer_kill_uuid: cleanup after transfer
+  attxfer_cancel_key: DTMF to cancel
+  attxfer_conf_key: DTMF to conference
+  attxfer_hangup_key: DTMF to hangup
+  blind_transfer_uuid: relationship tracking
+
+hold_music_variables:
+  hold_music: file path or stream
+  temp_hold_music: temporary override
+  holding_uuid: who put on hold
+  soft_holding_uuid: soft hold relationship
+
+origination_variables:
+  originator: originating channel UUID or name
+  originator_codec:
+  originator_video_codec:
+  ignore_early_media: wait for full answer
+  group_confirm_key: DTMF to confirm
+  group_confirm_file: prompt path
+  fail_on_single_reject: fail whole dial
+  origination_privacy: screen, hide_name, hide_number
+
+playback_control_variables:
+  playback_terminators: DTMF digits
+  playback_terminator_used: which key pressed
+  playback_delimiter: separator for files
+  playback_sleep_val: pause milliseconds
+
+dtmf_variables:
+  dtmf_type: rfc2833, inband, info
+  sensitive_dtmf: mask in logs
+  drop_dtmf: remove from audio
+  drop_dtmf_masking_file: comfort tone
+  drop_dtmf_masking_digits: 0123456789*#
+  bind_digit_action: realm,sequence,command
+  bind_digit_digit_timeout: milliseconds
+  bind_digit_input_timeout: total timeout
+  bind_meta_key:
+
+read_input_variables:
+  read_result: collected digits
+  read_terminator_used: which key ended input
+
+presence_variables:
+  presence_id: user@domain
+  presence_data: custom information
+
+system_variables:
+  session_in_hangup_hook:
+  proto_specific_hangup_cause: SIP status or ISDN cause
+  endpoint_disposition: endpoint's view
+  max_forwards: loop prevention (default 70)
+  max_session_transfers: limit transfer chains
+  disable_app_log: reduce verbosity
+  enable_heartbeat_events: seconds interval
+  audio_spool_path: temp files directory
+  ignore_display_updates: UPDATE handling
+  send_silence_when_idle:
+  passthru_ptime_mismatch: allow different ptimes
+  cache_speech_handles: TTS/ASR reuse
+  3pcc_force_dialplan:
+
+conference_variables:
+  conference_name:
+  conference_member_id:
+  conference_moderator:
+  conference_flags: mute, deaf, etc.
+
+video_variables:
+  video_width: 1280 typical
+  video_height: 720 typical
+  video_fps: frames per second
+  video_media_flow: sendrecv, sendonly, recvonly
+  audio_media_flow: sendrecv, sendonly, recvonly
+
+special_prefix_variables:
+  "nolocal:*": won't export to other legs
+  "export:*": auto-export to B-leg
+  "global:*": global scope
+
+originate_continue_variables:
+  continue_on_answer_timeout: continue dialplan
+  uuid_bridge_continue_on_cancel: don't fail on cancel
+
+miscellaneous_variables:
+  sound_prefix: base directory
+  sound_prefix_enforced:
+  timezone: America/New_York
+  language: en or es
+  sleep_eat_digits: consume DTMF during pause
+  socket_host: event socket
+  socket_path: Unix socket
+  socket_resume: continue without socket
+  media_webrtc:
