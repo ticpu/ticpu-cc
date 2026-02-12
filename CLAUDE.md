@@ -4,7 +4,7 @@ Personal Claude Code skill marketplace by Jérôme Poulin.
 
 ## Plugins
 
-- `freeswitch` — skills: `usage` (variables, ESL, user guide), `dialplan` (dialplan architect, dptools, channel variables), `dev` (core C, codecs, CI/CD), `sofia` (mod_sofia SIP)
+- `freeswitch` — skills: `guide` (variables, ESL, user guide), `dialplan` (dialplan architect, dptools, channel variables), `dev` (core C, codecs, CI/CD), `sofia` (mod_sofia SIP)
 - `bcachefs` — submodule from `ticpu/bcachefs-claude-plugin`
 
 ## FreeSWITCH

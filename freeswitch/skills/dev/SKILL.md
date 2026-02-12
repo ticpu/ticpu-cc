@@ -7,7 +7,7 @@ description: >
   (switch_core_media), codec negotiation internals (Normal/Greedy/Scrooge),
   Opus FEC/PLC, AMR-WB OA/BE mode-set negotiation, Oreka recording,
   transcoding bridge IO path, and Cauca CI/CD pipeline. Also load the
-  usage skill for dialplan/config/ESL, or the sofia skill for mod_sofia
+  guide skill for dialplan/config/ESL, or the sofia skill for mod_sofia
   SIP internals.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Task

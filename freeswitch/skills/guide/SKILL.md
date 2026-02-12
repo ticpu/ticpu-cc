@@ -1,5 +1,5 @@
 ---
-name: usage
+name: guide
 description: >
   ALWAYS load this skill before answering any FreeSWITCH configuration
   or operational question. Covers channel variable scoping and lifecycle,

@@ -7,7 +7,7 @@ description: >
   mod_dptools applications reference, channel variables reference,
   tone_stream:// and file-like protocols, sofia gateway routing syntax,
   best practices (flat extensions, data-driven routing, error handling),
-  and CAUCA production patterns. Also load the usage skill for variable
+  and CAUCA production patterns. Also load the guide skill for variable
   scoping and ESL, or the sofia skill for SIP internals.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Task
@@ -67,14 +67,14 @@ based on $ARGUMENTS.
 - [sofia_gateway_syntax.md](sofia_gateway_syntax.md) - Sofia gateway routing syntax with source code proof
 - [public_context_routing.md](public_context_routing.md) - Public context routing principles, provider failover
 
-### Shared with usage skill
+### Shared with guide skill
 
-- [dialplan_contexts.md](../usage/dialplan_contexts.md) - Context structure, extension matching, continue flag
-- [dialplan_execution_flow.md](../usage/dialplan_execution_flow.md) - Hunt vs execute phases
-- [dialplan_execution_flow_detailed.md](../usage/dialplan_execution_flow_detailed.md) - Detailed execution flow with code paths
-- [nested_conditions_behavior.md](../usage/nested_conditions_behavior.md) - Nested condition evaluation logic
-- [freeswitch_time_conditions_and_regex.md](../usage/freeswitch_time_conditions_and_regex.md) - Time-of-day routing, PCRE regex
-- [freeswitch_variables_guide.md](../usage/freeswitch_variables_guide.md) - Variable scoping, lifecycle, expansion
+- [dialplan_contexts.md](../guide/dialplan_contexts.md) - Context structure, extension matching, continue flag
+- [dialplan_execution_flow.md](../guide/dialplan_execution_flow.md) - Hunt vs execute phases
+- [dialplan_execution_flow_detailed.md](../guide/dialplan_execution_flow_detailed.md) - Detailed execution flow with code paths
+- [nested_conditions_behavior.md](../guide/nested_conditions_behavior.md) - Nested condition evaluation logic
+- [freeswitch_time_conditions_and_regex.md](../guide/freeswitch_time_conditions_and_regex.md) - Time-of-day routing, PCRE regex
+- [freeswitch_variables_guide.md](../guide/freeswitch_variables_guide.md) - Variable scoping, lifecycle, expansion
 
 ## Dialplan Structure Best Practices
 
@@ -251,6 +251,6 @@ sofia global siptrace on                     # Enable SIP trace
 - Hunt-then-execute is the most common source of dialplan confusion
 - A good dialplan is one that another engineer can understand and modify six months later
 - Clarity and simplicity are more valuable than clever tricks
-- For variable scoping and ESL details -> use the `usage` skill
+- For variable scoping and ESL details -> use the `guide` skill
 - For mod_sofia SIP internals -> use the `sofia` skill
 - For core C code, codec implementations -> use the `dev` skill

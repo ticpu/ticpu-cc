@@ -7,7 +7,7 @@ description: >
   dispatching, SDP offer/answer, RTP implementation (SRTP, DTMF, jitter
   buffers), SIP timers, transport management (UDP/TCP/TLS/WS/WSS), gateway
   state machines, multi-algorithm digest auth (RFC 8760). Also load the
-  dev skill for codec internals and core media C code, or the usage skill
+  dev skill for codec internals and core media C code, or the guide skill
   for dialplan/config/ESL.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Task
