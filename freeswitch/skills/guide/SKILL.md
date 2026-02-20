@@ -3,11 +3,12 @@ name: guide
 description: >
   ALWAYS load this skill before answering any FreeSWITCH configuration
   or operational question. Covers channel variable scoping and lifecycle,
-  hangup causes, ESL JSON API, time-of-day routing with PCRE regex, SIP
-  profile configuration and debugging, state machine, and general
-  operational guidance. Also load the dialplan skill for writing/reviewing
-  dialplans, the sofia skill for SIP-specific questions, or the dev skill
-  for C code and codec internals.
+  hangup causes, ESL authentication and userauth (per-user permissions,
+  ACL, command filtering), ESL JSON API, time-of-day routing with PCRE
+  regex, SIP profile configuration and debugging, state machine, and
+  general operational guidance. Also load the dialplan skill for
+  writing/reviewing dialplans, the sofia skill for SIP-specific questions,
+  or the dev skill for C code and codec internals.
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Task
 ---
@@ -35,12 +36,20 @@ state machine, and basic SIP operation.
   SIP signaling. Profiles have gateways for outbound registration. Basic
   debugging: `sofia status`, `sofia status profile <name>`,
   `sofia loglevel all 9`, `sofia global siptrace on`.
+- **ESL auth modes**: `auth <password>` (global, full access) vs
+  `userauth user@domain:password` (per-user, with event/API/log restrictions
+  from XML directory). ACL checked before auth challenge.
+- **ESL userauth parameters**: `esl-password`, `esl-allowed-events`,
+  `esl-allowed-api`, `esl-allowed-log`, `esl-disable-command-logging` —
+  set in directory `<params>` at domain/group/user level (later overrides).
 
 ## Hard Limits
 
 ```c
 #define MAX_RECUR 100          // Dialplan nesting depth
 int ovector[30]                // PCRE capture limit (15 pairs)
+#define MAX_ACL 100            // Event socket ACL entries
+#define MAX_CMD_LOG_EXCLUDE 32 // Command log exclusion patterns
 ```
 
 ## Detailed Reference
@@ -55,6 +64,7 @@ Pick the relevant ones based on $ARGUMENTS before answering questions.
 - [nested_conditions_behavior.md](nested_conditions_behavior.md) - Nested condition evaluation logic
 - [freeswitch_time_conditions_and_regex.md](freeswitch_time_conditions_and_regex.md) - Time-of-day routing, PCRE regex
 - [freeswitch_variables_guide.md](freeswitch_variables_guide.md) - Variable scoping, lifecycle, expansion
+- [esl_authentication.md](esl_authentication.md) - ESL auth, userauth, per-user permissions, ACL, command logging
 - [esl_api_json_formatting.md](esl_api_json_formatting.md) - ESL JSON API formatting
 - [sip_freeswitch_master_guide.md](sip_freeswitch_master_guide.md) - SIP debugging overview and common patterns
 
