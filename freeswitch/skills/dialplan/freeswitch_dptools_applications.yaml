@@ -8,7 +8,7 @@ applications:
   usage: '<action application="acknowledge_call" data=""/>'
 
 - name: answer
-  description: Begin billing
+  description: Answer the channel (sends SIP 200 OK). Starts billing timers. Channel transitions to CS_EXECUTE. In outbound ESL mode, this answers the incoming call to the socket application.
   usage: '<action application="answer" data=""/>'
 
 - name: hangup
@@ -67,7 +67,7 @@ applications:
   usage: '<action application="three_way" data="<uuid>"/>'
 
 - name: park
-  description: Park indefinitely
+  description: Suspend dialplan execution indefinitely (CS_PARK state). Channel stays answered with media path open but no audio playback. Another command (uuid_bridge, uuid_transfer, etc.) must pick up the channel. This is NOT SIP hold — no re-INVITE is sent.
   usage: '<action application="park" data=""/>'
 
 - name: unhold
@@ -781,10 +781,10 @@ applications:
   usage: '<action application="clear_speech_cache" data=""/>'
 
 - name: deflect
-  description: Deflect call at SIP level
+  description: Deflect an answered call via SIP REFER. The remote endpoint is asked to redirect itself to the specified URI. For unanswered calls, use `redirect` (SIP 302) instead. The API command `uuid_deflect` provides the same functionality by UUID.
   parameters:
-    destination: '[required] Deflection target'
-  usage: '<action application="deflect" data="<deflect_data>"/>'
+    destination: '[required] SIP URI to redirect to (e.g. sip:user@host)'
+  usage: '<action application="deflect" data="<sip_uri>"/>'
 
 - name: respond
   description: Send SIP response
@@ -793,10 +793,10 @@ applications:
   usage: '<action application="respond" data="<respond_data>"/>'
 
 - name: redirect
-  description: Redirect call at SIP level
+  description: Redirect an unanswered call via SIP 302 (Moved Temporarily). Must be used before the call is answered. For answered calls, use `deflect` (SIP REFER) instead.
   parameters:
-    destination: '[required] Redirect target(s)'
-  usage: '<action application="redirect" data="<redirect_data>"/>'
+    destination: '[required] SIP URI(s) to redirect to'
+  usage: '<action application="redirect" data="<sip_uri>"/>'
 
 - name: strftime
   description: Format time
@@ -922,3 +922,22 @@ applications:
 - name: park_state
   description: Control park state
   usage: '<action application="park_state" data=""/>'
+
+---
+section: Event Socket
+applications:
+- name: socket
+  description: Connect channel to an external ESL application (outbound mode). Provided by mod_event_socket, not mod_dptools.
+  parameters:
+    host_port: '[required] IP:port of the listening ESL application'
+    mode: '[optional] "async" for asynchronous socket mode (default: synchronous)'
+    full: '[optional] "full" grants the connected app the full ESL command set (api, bgapi, event, linger, etc.)'
+  usage: '<action application="socket" data="<host>:<port> [async [full]]"/>'
+  notes: |
+    Without "async", the channel blocks until the socket app completes each command.
+    Without "full", only single-channel commands are available: connect, myevents,
+    getvar, resume, filter, divert_events, sendmsg.
+    With "async full", the connected app gets the full ESL command set including
+    api, bgapi, event, linger, sendevent, log.
+    In originate, the data must be single-quoted because spaces separate originate
+    arguments: originate loopback/ext/ctx '&socket(host:port async full)'

@@ -66,6 +66,8 @@ Pick the relevant ones based on $ARGUMENTS before answering questions.
 - [freeswitch_variables_guide.md](freeswitch_variables_guide.md) - Variable scoping, lifecycle, expansion
 - [esl_authentication.md](esl_authentication.md) - ESL auth, userauth, per-user permissions, ACL, command logging
 - [esl_api_json_formatting.md](esl_api_json_formatting.md) - ESL JSON API formatting
+- [esl_outbound_mode.md](esl_outbound_mode.md) - ESL outbound mode: socket app, connect/linger/resume, command availability
+- [esl_event_reference.md](esl_event_reference.md) - Event headers, Caller- prefix convention, CUSTOM subclasses, priority, hangup causes
 - [sip_freeswitch_master_guide.md](sip_freeswitch_master_guide.md) - SIP debugging overview and common patterns
 
 ## Guidelines

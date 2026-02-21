@@ -291,3 +291,8 @@ misc:
   privacy:
     params: ["option"]
   park_state: {}
+
+event_socket:
+  socket:
+    desc: connect channel to external ESL app (mod_event_socket)
+    params: ["host_port", "mode", "full"]
