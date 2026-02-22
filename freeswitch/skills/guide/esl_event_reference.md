@@ -79,6 +79,29 @@ Priority is:
 - Available for consumers to read and filter on
 - **Not** used by core event dispatch for ordering
 
+## HEARTBEAT Event
+
+The global HEARTBEAT event is fired by a scheduler task at a fixed
+interval. It contains system health metrics (CPU, sessions, uptime).
+
+| Aspect | Details |
+|---|---|
+| Config parameter | `event-heartbeat-interval` in `switch.conf.xml` `<settings>` |
+| C struct field | `runtime.event_heartbeat_interval` (seconds) |
+| Default interval | 20 seconds |
+| Runtime changeable | No — config only read at startup, no API to modify |
+| Scope | Global (single scheduler task, all ESL connections) |
+| Source | `heartbeat_callback()` in `src/switch_core.c` |
+
+```xml
+<!-- switch.conf.xml -->
+<param name="event-heartbeat-interval" value="20"/>
+```
+
+Note: `SWITCH_EVENT_SESSION_HEARTBEAT` is a separate per-channel event
+controlled via `uuid_session_heartbeat` API, unrelated to the global
+HEARTBEAT used for ESL liveness detection.
+
 ## Common Hangup Causes
 
 Q.850 cause names as used by FreeSWITCH (`switch_call_cause_t` in
