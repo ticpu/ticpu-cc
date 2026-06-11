@@ -6,6 +6,7 @@ description: >
   (hunt vs execute), condition patterns, break attributes, inline actions,
   mod_dptools applications reference, channel variables reference,
   tone_stream:// and file-like protocols, sofia gateway routing syntax,
+  CAUCA pre-dialplan (mod_sofia SIP header processing before the dialplan),
   best practices (flat extensions, data-driven routing, error handling),
   and CAUCA production patterns. Also load the guide skill for variable
   scoping and ESL, or the sofia skill for SIP internals.
@@ -66,6 +67,7 @@ based on $ARGUMENTS.
 - [external_applications.md](external_applications.md) - File-like protocols (tone_stream://, etc.)
 - [sofia_gateway_syntax.md](sofia_gateway_syntax.md) - Sofia gateway routing syntax with source code proof
 - [public_context_routing.md](public_context_routing.md) - Public context routing principles, provider failover
+- [pre_dialplan.md](pre_dialplan.md) - CAUCA mod_sofia pre-dialplan: SIP header processing before the XML dialplan (hooks, actions, tflags)
 
 ### Shared with guide skill
 
