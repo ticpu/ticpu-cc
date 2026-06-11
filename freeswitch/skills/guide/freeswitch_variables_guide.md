@@ -1305,6 +1305,49 @@ Each `<regex>` creates numbered variables: `${DP_REGEX_MATCH_1_1}`, `${DP_REGEX_
 
 ---
 
+## Event Headers vs Channel Variables (uuid_dump Pitfall)
+
+`uuid_dump` output mixes two different data sources that look identical but are accessed differently:
+
+1. **Channel variables** — stored in the channel's variable hash, accessible via `uuid_getvar`, `${variable}` expansion, Lua `session:getVariable()`, etc.
+2. **Event headers** — dynamically generated from internal structs when an event is serialized (by `switch_channel_event_set_data()` in `switch_channel.c`). These appear in `uuid_dump` output with `Channel-` prefixes but are **not** channel variables.
+
+### Codec Fields: What's a Variable vs What's an Event Header
+
+When a codec is set, `switch_core_codec.c` explicitly stores only these as **channel variables**:
+
+| Channel Variable | Source | Accessible via `uuid_getvar` |
+|---|---|---|
+| `read_codec` | `session->read_impl.iananame` | Yes |
+| `read_rate` | `session->read_impl.actual_samples_per_second` | Yes |
+| `original_read_codec` | snapshot at codec set time | Yes |
+| `original_read_rate` | snapshot at codec set time | Yes |
+| `write_codec` | `session->write_impl.iananame` | Yes |
+| `write_rate` | `session->write_impl.actual_samples_per_second` | Yes |
+
+These `uuid_dump` fields are **event headers only** (generated in `switch_channel.c:~2724-2738`), NOT channel variables:
+
+| Event Header | Source | `uuid_getvar` returns |
+|---|---|---|
+| `Channel-Read-Codec-Bit-Rate` | `impl.bits_per_second` | `_undef_` |
+| `Channel-Write-Codec-Bit-Rate` | `impl.bits_per_second` | `_undef_` |
+| `Channel-Read-Codec-Name` | `impl.iananame` | `_undef_` (use `read_codec` instead) |
+| `Channel-Read-Codec-Rate` | `impl.actual_samples_per_second` | `_undef_` (use `read_rate` instead) |
+
+### Accessing Bit Rate from Lua/ESL
+
+The bit rate is only available through the codec implementation struct:
+
+```lua
+-- Lua: access via session implementation getters
+local read_impl = session:read_impl()   -- switch_codec_implementation_t
+local write_impl = session:write_impl()
+local read_bps = read_impl.bits_per_second
+local write_bps = write_impl.bits_per_second
+```
+
+For ESL or contexts without direct session access, parse `uuid_dump` event output and extract the `Channel-Read-Codec-Bit-Rate` header.
+
 ## Reference Tables
 
 ### Variable Expansion Type Reference

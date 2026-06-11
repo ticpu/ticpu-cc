@@ -81,6 +81,16 @@ Main SDP negotiation: Sofia-SIP parsing, codec matching, ICE candidates, SRTP/DT
 **Media behavior**: `disable_rtp_auto_adjust`, `video_possible`, `has_t38`
 **Debug/compatibility**: `NDLB_broken_opus_sdp`, crypto key storage
 
+### Codec Variables Set by Core (`switch_core_codec.c`)
+
+When `switch_core_session_set_read_codec()` or `set_write_codec()` runs, these channel variables are stored:
+- `read_codec`, `read_rate`, `original_read_codec`, `original_read_rate`
+- `write_codec`, `write_rate`
+
+**Not stored as channel variables**: `bits_per_second` — only available via `switch_core_session_get_read_impl()` / `switch_core_session_get_write_impl()` which return the full `switch_codec_implementation_t` struct. The bit rate appears in `uuid_dump` as the `Channel-Read-Codec-Bit-Rate` event header (generated dynamically by `switch_channel_event_set_data()` in `switch_channel.c`), but `uuid_getvar` cannot retrieve it.
+
+See also: *Event Headers vs Channel Variables* section in the variables guide.
+
 
 ## Flags & Bug Handling
 
