@@ -1,6 +1,6 @@
 {
   "name": "freeswitch",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "FreeSWITCH skills: guide/config, dialplan architect, core C development, and mod_sofia SIP internals",
   "author": {
     "name": "Jérôme Poulin",
