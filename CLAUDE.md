@@ -26,6 +26,10 @@ cd vendor/bcachefs-claude-plugin && git pull origin master
 3. Annotated signed tag: `git tag -as v<version>` with changelog body
 4. Push: `git push && git push --tags`
 
+## Background Agents
+
+- Agents that need to write files must test Write permission at the start (write a trivial temp file, then delete it) and abort immediately if denied. Do not waste a full research pass only to fail at the write step.
+
 ## Updating after push
 
 ```
